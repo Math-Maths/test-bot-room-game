@@ -1,0 +1,55 @@
+{
+    "version": 1,
+    "name": "PlayerInputAsset",
+    "maps": [
+        {
+            "name": "Base",
+            "id": "acb768f3-c4fa-45c3-80b5-966d0d446959",
+            "actions": [
+                {
+                    "name": "Move",
+                    "type": "Value",
+                    "id": "52ee98b6-6346-46e2-b457-a68353e6dc18",
+                    "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                },
+                {
+                    "name": "Jump",
+                    "type": "Button",
+                    "id": "6413ff8a-c8bd-45b6-981b-97d638bacd07",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "934b0fce-1dd3-4777-ba98-6f84d81089ad",
+                    "path": "<Gamepad>/leftStick",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Move",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "86715908-c2a8-4430-8163-fe396821c775",
+                    "path": "<Keyboard>/space",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Jump",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        }
+    ],
+    "controlSchemes": []
+}
