@@ -63,5 +63,13 @@ namespace TestBotRoom
             _controller.Move(finalMove * Time.deltaTime);
         }
 
+        private void OnTriggerEnter(Collider other)
+        {
+            if(other.TryGetComponent<LaserBehavior>(out LaserBehavior laser))
+            {
+                Destroy(gameObject);
+            }
+        }
+
     }
 }
