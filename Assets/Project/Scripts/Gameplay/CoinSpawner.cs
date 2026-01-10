@@ -15,6 +15,7 @@ namespace TestBotRoom
         private void Start()
         {
             CreateACoin();
+            EventManager.Instance.AddListener(EventNameSaver.OnCoinColleted, ChangeCoinPosition);
         }
 
         private void CreateACoin()
@@ -23,7 +24,6 @@ namespace TestBotRoom
             float randomZ = Random.Range(-mapLenght, mapLenght);
             Vector3 finalPosition = new Vector3(randomX, coinHeight, randomZ);
             _currentCoin = Instantiate(coinPrefab, finalPosition, Quaternion.identity);
-            _currentCoin.OnCoinColleted += ChangeCoinPosition;
         }
 
         private void ChangeCoinPosition()

@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 
 namespace TestBotRoom
 {
@@ -67,7 +68,8 @@ namespace TestBotRoom
         {
             if(other.TryGetComponent<LaserBehavior>(out LaserBehavior laser))
             {
-                Destroy(gameObject);
+                EventManager.Instance.Invoke(EventNameSaver.OnPlayerDeath);
+                gameObject.SetActive(false);
             }
         }
 

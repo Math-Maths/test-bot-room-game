@@ -10,6 +10,7 @@ namespace TestBotRoom
         private void OnTriggerEnter(Collider other)
         {
             OnCoinColleted?.Invoke();
+            EventManager.Instance.Invoke(EventNameSaver.OnCoinColleted);
         }
     }
 }
