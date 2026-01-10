@@ -111,6 +111,15 @@ namespace TestBotRoom
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Revive - Debug"",
+                    ""type"": ""Button"",
+                    ""id"": ""2492b77d-59e6-4c23-9281-7e00b56abfa6"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -190,6 +199,17 @@ namespace TestBotRoom
                     ""action"": ""Jump"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""5e24ddf7-b891-42c9-aee5-99257fbf299b"",
+                    ""path"": ""<Keyboard>/k"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Revive - Debug"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -200,6 +220,7 @@ namespace TestBotRoom
             m_Base = asset.FindActionMap("Base", throwIfNotFound: true);
             m_Base_Move = m_Base.FindAction("Move", throwIfNotFound: true);
             m_Base_Jump = m_Base.FindAction("Jump", throwIfNotFound: true);
+            m_Base_ReviveDebug = m_Base.FindAction("Revive - Debug", throwIfNotFound: true);
         }
 
         ~@PlayerInputAsset()
@@ -282,6 +303,7 @@ namespace TestBotRoom
         private List<IBaseActions> m_BaseActionsCallbackInterfaces = new List<IBaseActions>();
         private readonly InputAction m_Base_Move;
         private readonly InputAction m_Base_Jump;
+        private readonly InputAction m_Base_ReviveDebug;
         /// <summary>
         /// Provides access to input actions defined in input action map "Base".
         /// </summary>
@@ -301,6 +323,10 @@ namespace TestBotRoom
             /// Provides access to the underlying input action "Base/Jump".
             /// </summary>
             public InputAction @Jump => m_Wrapper.m_Base_Jump;
+            /// <summary>
+            /// Provides access to the underlying input action "Base/ReviveDebug".
+            /// </summary>
+            public InputAction @ReviveDebug => m_Wrapper.m_Base_ReviveDebug;
             /// <summary>
             /// Provides access to the underlying input action map instance.
             /// </summary>
@@ -333,6 +359,9 @@ namespace TestBotRoom
                 @Jump.started += instance.OnJump;
                 @Jump.performed += instance.OnJump;
                 @Jump.canceled += instance.OnJump;
+                @ReviveDebug.started += instance.OnReviveDebug;
+                @ReviveDebug.performed += instance.OnReviveDebug;
+                @ReviveDebug.canceled += instance.OnReviveDebug;
             }
 
             /// <summary>
@@ -350,6 +379,9 @@ namespace TestBotRoom
                 @Jump.started -= instance.OnJump;
                 @Jump.performed -= instance.OnJump;
                 @Jump.canceled -= instance.OnJump;
+                @ReviveDebug.started -= instance.OnReviveDebug;
+                @ReviveDebug.performed -= instance.OnReviveDebug;
+                @ReviveDebug.canceled -= instance.OnReviveDebug;
             }
 
             /// <summary>
@@ -404,6 +436,13 @@ namespace TestBotRoom
             /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
             /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
             void OnJump(InputAction.CallbackContext context);
+            /// <summary>
+            /// Method invoked when associated input action "Revive - Debug" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+            /// </summary>
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+            void OnReviveDebug(InputAction.CallbackContext context);
         }
     }
 }
