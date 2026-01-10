@@ -18,18 +18,6 @@ namespace TestBotRoom
             StartCoroutine(SpawnSequence());
         }
 
-        // private void Update()
-        // {
-        //     if(Time.time > _nextSpanw)
-        //     {
-        //         _nextSpanw = Time.time + timeBetweenSpanw;
-
-        //         int randomPosition = Random.Range(0, spawnPositions.Length);
-        //         LaserBehavior laser = Instantiate(laserPrefab, spawnPositions[randomPosition]);
-        //         laser.InitializeLaser(spawnPositions[randomPosition].forward);
-        //     }
-        // }
-
         IEnumerator SpawnSequence()
         {
             while(true)
