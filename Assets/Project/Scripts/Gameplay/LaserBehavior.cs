@@ -13,6 +13,14 @@ namespace TestBotRoom
         {
             if(_initialized)
                 transform.Translate(Vector3.forward * moveSpeed * Time.deltaTime, Space.Self);
+
+            float limitDistanteX = Mathf.Abs(transform.position.x); 
+            float limitDistanteZ = Mathf.Abs(transform.position.z);
+
+            if(limitDistanteX > 9 || limitDistanteZ > 9)
+            {
+                Destroy(gameObject);
+            }
         }
 
         public void InitializeLaser(Vector3 forwardDir, float speed)
