@@ -38,6 +38,19 @@ namespace TestBotRoom
 
         private void Update()
         {
+            if(!GameManager.Instance.IsGameRunning)
+                return;
+
+            ApplyMoveAndGravity();
+        }
+
+        public void InitializePlayer()
+        {
+            transform.position = Vector3.zero;
+        }
+
+        private void ApplyMoveAndGravity()
+        {
             _isGrounded = _controller.isGrounded;
 
             if(_isGrounded)

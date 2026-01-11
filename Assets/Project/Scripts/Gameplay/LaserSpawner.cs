@@ -15,12 +15,17 @@ namespace TestBotRoom
 
         private void Start()
         {
+            EventManager.Instance.AddListener(EventNameSaver.OnGameStarts, StartLasers);
+        }
+
+        private void StartLasers()
+        {
             StartCoroutine(SpawnSequence());
         }
 
         IEnumerator SpawnSequence()
         {
-            while(true)
+            while(GameManager.Instance.IsGameRunning)
             {
                 yield return new WaitForSeconds(timeBetweenSpanw);
 
