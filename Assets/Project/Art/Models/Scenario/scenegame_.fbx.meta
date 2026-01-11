@@ -3,7 +3,12 @@ guid: a8633181efdf790428101f2d78799510
 ModelImporter:
   serializedVersion: 22200
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: roomtest_scene.vox Material
+    second: {fileID: -876546973899608171, guid: de78628dde9fa084c833c1535aa58eeb, type: 3}
   materials:
     materialImportMode: 2
     materialName: 0

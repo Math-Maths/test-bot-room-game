@@ -24,7 +24,7 @@ namespace TestBotRoom
         private void Start()
         {
             EventManager.Instance.AddListener(EventNameSaver.OnGameStarts, StartLasers);
-            //EventManager.Instance.AddListener(EventNameSaver.OnCoinColleted, AdjustDifficulty);
+            EventManager.Instance.AddListener(EventNameSaver.OnCoinColleted, AdjustDifficulty);
             _difficultMultiplier = 0.1f;
         }
 
