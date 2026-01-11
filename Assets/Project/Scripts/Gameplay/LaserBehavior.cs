@@ -15,9 +15,10 @@ namespace TestBotRoom
                 transform.Translate(Vector3.forward * moveSpeed * Time.deltaTime, Space.Self);
         }
 
-        public void InitializeLaser(Vector3 forwardDir)
+        public void InitializeLaser(Vector3 forwardDir, float speed)
         {
             transform.forward = forwardDir;
+            moveSpeed = speed;
             _initialized = true;
             Destroy(gameObject, 10f);
         }

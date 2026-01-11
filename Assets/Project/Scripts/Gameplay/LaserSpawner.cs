@@ -1,4 +1,5 @@
 using System.Collections;
+using TestBotRoom.Utils;
 using UnityEngine;
 
 namespace TestBotRoom
@@ -10,12 +11,21 @@ namespace TestBotRoom
         [SerializeField] private Transform[] spawnPositions;
         [SerializeField] private float timeBetweenSpanw;
 
+        [SerializeField] private float minSpawnTime;
+        [SerializeField] private float maxLaserSpeed;
+        [SerializeField] private float minLaserSpeed;
+        [SerializeField] private float maxArrowTime;
+        [SerializeField] private float minArrowTime;
+
         private float _nextSpanw;
+        private float _difficultMultiplier;
         private GameObject spawnedArrow;
 
         private void Start()
         {
             EventManager.Instance.AddListener(EventNameSaver.OnGameStarts, StartLasers);
+            //EventManager.Instance.AddListener(EventNameSaver.OnCoinColleted, AdjustDifficulty);
+            _difficultMultiplier = 0.1f;
         }
 
         private void StartLasers()
@@ -27,7 +37,9 @@ namespace TestBotRoom
         {
             while(GameManager.Instance.IsGameRunning)
             {
-                yield return new WaitForSeconds(timeBetweenSpanw);
+                float waitTime = Mathf.Lerp(timeBetweenSpanw, minSpawnTime, _difficultMultiplier);
+                //Debug.Log("Wait Time: " + waitTime);
+                yield return new WaitForSeconds(waitTime);
 
                 int randomPosition = Random.Range(0, spawnPositions.Length);
                 Vector3 arrowPosition = spawnPositions[randomPosition].position;
@@ -42,16 +54,24 @@ namespace TestBotRoom
                 spawnedArrow.SetActive(true);
 
                 // Wait before spawning laser
-                yield return new WaitForSeconds(1.5f);
+                float arrowTime = Mathf.Lerp(maxArrowTime, minArrowTime, _difficultMultiplier);
+                yield return new WaitForSeconds(arrowTime);
 
                 // Instantiate laser
                 LaserBehavior laser = Instantiate(laserPrefab, spawnPositions[randomPosition]);
-                laser.InitializeLaser(spawnPositions[randomPosition].forward);
+                float currentSpeed = Mathf.Lerp(minLaserSpeed, maxLaserSpeed, _difficultMultiplier);
+                //Debug.Log("Current Speed: " + currentSpeed);
+                laser.InitializeLaser(spawnPositions[randomPosition].forward, currentSpeed);
 
                 // Hide arrow
                 spawnedArrow.SetActive(false);
             }
+        }
 
+        private void AdjustDifficulty()
+        {  
+            _difficultMultiplier = DifficultyMultiplier.GetDifficulty();
+            Debug.Log("Difficulty: " + _difficultMultiplier);
         }
 
     }

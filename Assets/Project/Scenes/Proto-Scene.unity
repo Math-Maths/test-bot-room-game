@@ -175,7 +175,12 @@ MonoBehaviour:
   - {fileID: 1320814141}
   - {fileID: 718360941}
   - {fileID: 818479343}
-  timeBetweenSpanw: 0.25
+  timeBetweenSpanw: 1
+  minSpawnTime: 0.5
+  maxLaserSpeed: 5
+  minLaserSpeed: 3
+  maxArrowTime: 1.5
+  minArrowTime: 0.5
 --- !u!114 &54066156
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -753,7 +758,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &490402091
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1293,7 +1298,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   worldScoreText: {fileID: 1395888324}
-  bestScoreText: {fileID: 0}
+  bestScoreText: {fileID: 883345333}
 --- !u!4 &878394401
 Transform:
   m_ObjectHideFlags: 0
@@ -1357,7 +1362,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 167}
-  m_SizeDelta: {x: 323.83, y: 80.959}
+  m_SizeDelta: {x: 509.4399, y: 127.3624}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &883345333
 MonoBehaviour:
@@ -1379,7 +1384,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 1000
+  m_text: 0
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -1406,12 +1411,12 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 72
+  m_fontSize: 114
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
   m_fontSizeMin: 18
-  m_fontSizeMax: 72
+  m_fontSizeMax: 165.1
   m_fontStyle: 1
   m_HorizontalAlignment: 2
   m_VerticalAlignment: 512

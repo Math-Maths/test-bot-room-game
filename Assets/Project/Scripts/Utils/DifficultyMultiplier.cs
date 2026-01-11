@@ -5,12 +5,14 @@ namespace TestBotRoom.Utils
 
 public static class DifficultyMultiplier
 {
-    private static float secondsToMaxDifficulty = 60f;
+    public static float coinsToMaxDifficulty = 50;
+    public static float currentCoinCount;
 
     public static float GetDifficulty()
     {
-        return Mathf.Clamp01(Time.timeSinceLevelLoad / secondsToMaxDifficulty);
-    }
+        float difficulty = Mathf.Clamp01(currentCoinCount / coinsToMaxDifficulty);
 
+        return difficulty;
+    }
 }
 }
