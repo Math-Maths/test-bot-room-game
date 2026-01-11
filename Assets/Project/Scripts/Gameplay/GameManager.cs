@@ -1,3 +1,4 @@
+using Unity.Cinemachine;
 using UnityEngine;
 
 namespace TestBotRoom
@@ -5,8 +6,12 @@ namespace TestBotRoom
     public class GameManager : MonoBehaviour
     {
         public static GameManager Instance {get; private set;}
-        
+
+        [SerializeField] private PlayerController playerPrefab;
+        [SerializeField] private CinemachineCamera followPlayerCamera;
+
         private bool _isGameRunning;
+        private PlayerController _playerGO;
 
         public bool IsGameRunning
         {
@@ -24,8 +29,24 @@ namespace TestBotRoom
         private void PlayerDeath()
         {
             Debug.Log("Game Over");
+            EventManager.Instance.Invoke(EventNameSaver.OnGameOver);
             _isGameRunning = false;
         }
 
+        public void PlayGame()
+        {
+            _isGameRunning = true;
+            EventManager.Instance.Invoke(EventNameSaver.OnGameStarts);
+
+            if(_playerGO == null)
+                _playerGO = Instantiate(playerPrefab);
+            else
+                _playerGO.gameObject.SetActive(true);
+
+            _playerGO.InitializePlayer();
+
+            followPlayerCamera.LookAt = _playerGO.transform;
+        }
+        
     }
 }
