@@ -14,5 +14,10 @@ public static class DifficultyMultiplier
 
         return difficulty;
     }
+
+    public static void ResetDifficulty()
+    {
+        currentCoinCount = 0;
+    }
 }
 }
