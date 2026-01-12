@@ -7,7 +7,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Glass_Material 1
+  m_Name: Laser_Outside_Material
   m_Shader: {fileID: 4800000, guid: 933532a4fcc9baf4fa0491de14d08ed7, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
@@ -111,7 +111,7 @@ Material:
     - _Parallax: 0.005
     - _QueueOffset: 0
     - _ReceiveShadows: 1
-    - _Smoothness: 1
+    - _Smoothness: 0
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
     - _SrcBlend: 1
@@ -120,9 +120,9 @@ Material:
     - _WorkflowMode: 1
     - _ZWrite: 0
     m_Colors:
-    - _BaseColor: {r: 0.9622642, g: 0.036364287, b: 0.0199715, a: 0.7882353}
-    - _Color: {r: 0.9622641, g: 0.036364287, b: 0.0199715, a: 0.7882353}
-    - _EmissionColor: {r: 1.6448318, g: 0, b: 0.08717133, a: 1}
+    - _BaseColor: {r: 1, g: 0.048679143, b: 0, a: 0.7882353}
+    - _Color: {r: 1, g: 0.04867912, b: 0, a: 0.7882353}
+    - _EmissionColor: {r: 1.334161, g: 0, b: 0.038054872, a: 1}
     - _SpecColor: {r: 0.19999996, g: 0.19999996, b: 0.19999996, a: 1}
   m_BuildTextureStacks: []
   m_AllowLocking: 1
