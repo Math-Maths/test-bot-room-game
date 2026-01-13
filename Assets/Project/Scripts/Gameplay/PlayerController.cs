@@ -79,7 +79,7 @@ namespace TestBotRoom
 
         private void OnTriggerEnter(Collider other)
         {
-            if(other.TryGetComponent<LaserBehavior>(out LaserBehavior laser))
+            if(other.CompareTag("Laser"))
             {
                 EventManager.Instance.Invoke(EventNameSaver.OnPlayerDeath);
                 gameObject.SetActive(false);

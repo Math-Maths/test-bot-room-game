@@ -24,6 +24,7 @@ namespace TestBotRoom
         {
             EventManager.Instance.AddListener(EventNameSaver.OnGameStarts, StartLasers);
             EventManager.Instance.AddListener(EventNameSaver.OnCoinColleted, AdjustDifficulty);
+            EventManager.Instance.AddListener(EventNameSaver.OnPlayerDeath, StopAllCoroutines);
             _difficultMultiplier = 0.1f;
         }
 
@@ -43,15 +44,6 @@ namespace TestBotRoom
                 yield return new WaitForSeconds(waitTime);
 
                 int randomPosition = Random.Range(0, spawnPositions.Length);
-                //Vector3 arrowPosition = spawnPositions[randomPosition].position;
-
-                // Show arrow
-                //if(spawnedArrow == null)
-                //    spawnedArrow = Instantiate(arrowPrefab, arrowPosition, Quaternion.identity);
-                //else
-                //    spawnedArrow.transform.position = arrowPosition;
-                //spawnedArrow.transform.forward = spawnPositions[randomPosition].forward;
-                //spawnedArrow.SetActive(true);
 
                 // Wait before spawning laser
                 ElasticScale laserScale = spawnPositions[randomPosition].gameObject.GetComponent<ElasticScale>();
@@ -64,9 +56,6 @@ namespace TestBotRoom
                 float currentSpeed = Mathf.Lerp(minLaserSpeed, maxLaserSpeed, _difficultMultiplier);
                 //Debug.Log("Current Speed: " + currentSpeed);
                 laser.InitializeLaser(spawnPositions[randomPosition].forward, currentSpeed);
-
-                // Hide arrow
-                //spawnedArrow.SetActive(false);
             }
         }
 

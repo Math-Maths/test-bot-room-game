@@ -23,6 +23,8 @@ namespace TestBotRoom
             if(Instance == null) Instance = this;
             else Destroy(gameObject);
 
+            DontDestroyOnLoad(gameObject);
+
             EventManager.Instance.AddListener(EventNameSaver.OnPlayerDeath, PlayerDeath);
         }
 
