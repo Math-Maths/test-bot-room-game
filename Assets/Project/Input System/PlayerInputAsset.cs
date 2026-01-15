@@ -202,6 +202,17 @@ namespace TestBotRoom
                 },
                 {
                     ""name"": """",
+                    ""id"": ""f1d636f1-60f6-43e2-93d2-b7fc7f839099"",
+                    ""path"": ""<Gamepad>/buttonSouth"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Jump"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
                     ""id"": ""5e24ddf7-b891-42c9-aee5-99257fbf299b"",
                     ""path"": ""<Keyboard>/k"",
                     ""interactions"": """",
