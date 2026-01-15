@@ -25,8 +25,6 @@ namespace TestBotRoom
         [SerializeField] private float moveSpeed;
         [SerializeField] private float jumpForce;
 
-        private bool isGrounded;
-
         private void Awake()
         {
             _playerInput = GetComponent<PlayerInput>();
@@ -83,6 +81,7 @@ namespace TestBotRoom
             {
                 EventManager.Instance.Invoke(EventNameSaver.OnPlayerDeath);
                 gameObject.SetActive(false);
+                transform.position = Vector3.zero;
             }
         }
 
