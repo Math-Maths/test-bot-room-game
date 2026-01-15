@@ -20,6 +20,18 @@ namespace TestBotRoom.UI
             UpdateUI(_coinCount);
         }
 
+        private void OnEnable()
+        {
+            EventManager.Instance.AddListener(EventNameSaver.OnCoinColleted, IncreaseCoinCount);
+            EventManager.Instance.AddListener(EventNameSaver.OnGameOver, ScoreReset);
+        }
+
+        private void OnDisable()
+        {
+            EventManager.Instance.RemoveListener(EventNameSaver.OnCoinColleted, IncreaseCoinCount);
+            EventManager.Instance.RemoveListener(EventNameSaver.OnGameOver, ScoreReset);
+        }
+
         private void IncreaseCoinCount()
         {
             _coinCount++;
@@ -29,7 +41,7 @@ namespace TestBotRoom.UI
         private void UpdateUI(int value)
         {
             _coinCount = value;
-            worldScoreText.text = _coinCount.ToString();
+            worldScoreText.text = _coinCount.ToString("000");
         }
 
         private void ScoreReset()
@@ -37,7 +49,7 @@ namespace TestBotRoom.UI
             if(_coinCount > _bestScore)
             {
                 _bestScore = _coinCount;
-                bestScoreText.text = _bestScore.ToString();
+                bestScoreText.text = _bestScore.ToString("000");
             }
 
             UpdateUI(0);

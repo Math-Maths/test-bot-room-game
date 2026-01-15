@@ -1,6 +1,5 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.SceneManagement;
 
 namespace TestBotRoom
 {
@@ -36,7 +35,7 @@ namespace TestBotRoom
 
         private void Update()
         {
-            if(!GameManager.Instance.IsGameRunning)
+            if(GameManager.Instance.CurrentGameState != GameState.Gameplay)
                 return;
 
             ApplyMoveAndGravity();

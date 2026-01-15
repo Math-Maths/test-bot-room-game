@@ -8,11 +8,19 @@ namespace TestBotRoom
         [SerializeField] private PlayerController playerPrefab;
         [SerializeField] private CinemachineCamera followPlayerCamera;
 
+        [Header("Time to Start Gameplay")]
+        [SerializeField] private float delayTime;
+
         private PlayerController _playerInstance;
 
-        private void Start()
+        private void OnEnable()
         {
             EventManager.Instance.AddListener(EventNameSaver.OnGameStarts, StarResetGameplay);
+        }
+
+        private void OnDisable()
+        {
+            EventManager.Instance.RemoveListener(EventNameSaver.OnGameStarts, StarResetGameplay);
         }
 
         public void StarResetGameplay()

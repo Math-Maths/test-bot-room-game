@@ -6,18 +6,12 @@ namespace TestBotRoom
     {
         public static GameManager Instance {get; private set;}
 
-        public enum GameState
-        {
-            Menu,
-            Playing,
-            GameOver
-        }
+        private GameState _currentGameState;
 
-        private bool _isGameRunning;
-
-        public bool IsGameRunning
+        public GameState CurrentGameState
         {
-            get { return _isGameRunning;}
+            get { return _currentGameState; }
+            private set { _currentGameState = value; }
         }
 
         private void Awake()
@@ -25,23 +19,38 @@ namespace TestBotRoom
             if(Instance == null) Instance = this;
             else Destroy(gameObject);
 
-            DontDestroyOnLoad(gameObject);
+            DontDestroyOnLoad(gameObject); 
+        }
 
+        private void OnEnable()
+        {
             EventManager.Instance.AddListener(EventNameSaver.OnPlayerDeath, PlayerDeath);
+        }
+
+        private void OnDisable()
+        {
+            EventManager.Instance.RemoveListener(EventNameSaver.OnPlayerDeath, PlayerDeath);
         }
 
         private void PlayerDeath()
         {
-            //Debug.Log("Game Over");
             EventManager.Instance.Invoke(EventNameSaver.OnGameOver);
-            _isGameRunning = false;
+            _currentGameState = GameState.GameOver;
         }
 
         public void StartGamePlay()
         {
-            _isGameRunning = true;
+            _currentGameState = GameState.Gameplay;
             EventManager.Instance.Invoke(EventNameSaver.OnGameStarts);
         }
 
+    }
+
+    public enum GameState
+    {
+        Menu,
+        Gameplay,
+        Tutorial,
+        GameOver
     }
 }
