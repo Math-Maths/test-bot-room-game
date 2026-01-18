@@ -2,9 +2,8 @@ using UnityEngine;
 
 namespace TestBotRoom
 {
-    public class CoinSpawner : MonoBehaviour
+    public class CoinSpawner : MonoBehaviour, IInitiation
     {
-        
         [SerializeField] private CoinBehavior coinPrefab;
         [SerializeField] private float mapWidth;
         [SerializeField] private float mapLenght;
@@ -12,13 +11,17 @@ namespace TestBotRoom
 
         private CoinBehavior _currentCoin;
 
-        private void Start()
+        public void OnInitiate()
         {
-            CreateACoin();
             EventManager.Instance.AddListener(EventNameSaver.OnCoinColleted, ChangeCoinPosition);
         }
 
-        private void CreateACoin()
+        private void OnDisable()
+        {
+            EventManager.Instance.RemoveListener(EventNameSaver.OnCoinColleted, ChangeCoinPosition);
+        }
+
+        public void CreateACoin()
         {
             float randomX = Random.Range(-mapWidth, mapLenght);
             float randomZ = Random.Range(-mapLenght, mapLenght);

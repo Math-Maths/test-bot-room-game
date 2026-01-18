@@ -4,7 +4,6 @@ namespace TestBotRoom
 {
     public class LaserBehavior : MonoBehaviour
     {
-            
         [SerializeField] private float moveSpeed = 2f;
 
         private bool _initialized = false;

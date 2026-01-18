@@ -1,3 +1,5 @@
+using System.Collections;
+using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -5,7 +7,7 @@ namespace TestBotRoom
 {
     [RequireComponent(typeof(PlayerInput))]
     [RequireComponent(typeof(CharacterController))]
-    public class PlayerController : MonoBehaviour
+    public class PlayerController : MonoBehaviour, IInitiation
     {
         
         private PlayerInput _playerInput;
@@ -13,7 +15,9 @@ namespace TestBotRoom
 
         private float _gravityValue = -9.81f;
         private bool _isGrounded;
+        private bool _canMove = true;
         private Vector3 _playerVelocity;
+        private string _currentAnimation;
 
         #region Input Actions
         private InputAction _move;
@@ -23,27 +27,32 @@ namespace TestBotRoom
         [Header("Player Settings")]
         [SerializeField] private float moveSpeed;
         [SerializeField] private float jumpForce;
+        [SerializeField] private Animator playerAnimator;
 
-        private void Awake()
+        public void OnInitiate()
         {
             _playerInput = GetComponent<PlayerInput>();
             _controller = GetComponent<CharacterController>();
 
             _move = _playerInput.actions["Move"];
             _jump = _playerInput.actions["Jump"];
+
+            _canMove = false;
+        }
+
+        public void StartGamePlay()
+        {
+            transform.Translate(Vector3.zero, Space.World);
+            _canMove = true;   
+            ShotAnimation("Player Idle");
         }
 
         private void Update()
         {
-            if(GameManager.Instance.CurrentGameState != GameState.Gameplay)
+            if(GameManager.Instance.CurrentGameState != GameState.Gameplay || !_canMove)
                 return;
 
             ApplyMoveAndGravity();
-        }
-
-        public void InitializePlayer()
-        {
-            transform.position = Vector3.zero;
         }
 
         private void ApplyMoveAndGravity()
@@ -66,21 +75,78 @@ namespace TestBotRoom
             if(_isGrounded && _jump.WasPressedThisFrame())
             {
                 _playerVelocity.y = Mathf.Sqrt(jumpForce * -2f * _gravityValue);
+                ShotAnimation("Player Jump Start");
             }
 
             _playerVelocity.y += _gravityValue * Time.deltaTime;
 
             Vector3 finalMove = move * moveSpeed + Vector3.up * _playerVelocity.y;
             _controller.Move(finalMove * Time.deltaTime);
+
+            CheckAnimations();
+        }
+
+        private void CheckAnimations()
+        {
+            bool isMoving = _move.ReadValue<Vector2>() != Vector2.zero;
+
+            if(_currentAnimation == "Player Jump End" || _currentAnimation == "Player Jump Start" || _currentAnimation == "Player Death")
+                return;
+
+            if(_currentAnimation == "Player Jump Air")
+            {
+                if(_isGrounded)
+                    ShotAnimation("Player Jump End");
+                return;
+            }
+
+            if(isMoving)
+            {
+                ShotAnimation("Player Walk");
+            }
+            else
+            {
+                ShotAnimation("Player Idle");
+            }
+        }
+
+        public void ShotAnimation(string animationName, float delay = 0f)
+        {
+            if(delay > 0f)
+            {
+                StartCoroutine(WaitAndPlay());
+            }
+            else
+            {
+                ValidateAndPlay();
+            }
+
+            IEnumerator WaitAndPlay()
+            {  
+                yield return new WaitForSeconds(delay);
+                ValidateAndPlay();
+            }
+
+            void ValidateAndPlay()
+            {
+                if(animationName == "")
+                    CheckAnimations();
+                else
+                    playerAnimator.Play(animationName);
+
+                if(_currentAnimation == animationName)
+                    return;
+                _currentAnimation = animationName;
+            }
         }
 
         private void OnTriggerEnter(Collider other)
         {
             if(other.CompareTag("Laser"))
             {
-                EventManager.Instance.Invoke(EventNameSaver.OnPlayerDeath);
-                gameObject.SetActive(false);
-                transform.position = Vector3.zero;
+                _canMove = false;
+                EventManager.Instance.Invoke(EventNameSaver.OnGameOver);
+                ShotAnimation("Player Death");
             }
         }
 

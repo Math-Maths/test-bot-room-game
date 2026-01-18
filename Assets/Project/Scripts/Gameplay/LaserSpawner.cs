@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace TestBotRoom
 {
-    public class LaserSpanwer : MonoBehaviour
+    public class LaserSpawner : MonoBehaviour, IInitiation
     {
         [Header("Laser Spawner Settings")]
         [SerializeField] private LaserBehavior laserPrefab;
@@ -21,21 +21,19 @@ namespace TestBotRoom
 
         private float _difficultMultiplier;
 
-        private void OnEnable()
+        public void OnInitiate()
         {
-            EventManager.Instance.AddListener(EventNameSaver.OnGameStarts, StartLasers);
             EventManager.Instance.AddListener(EventNameSaver.OnCoinColleted, AdjustDifficulty);
-            EventManager.Instance.AddListener(EventNameSaver.OnPlayerDeath, StopAllCoroutines);
+            EventManager.Instance.AddListener(EventNameSaver.OnGameOver, StopAllCoroutines);
         }
 
         private void OnDisable()
         {
-            EventManager.Instance.RemoveListener(EventNameSaver.OnGameStarts, StartLasers);
             EventManager.Instance.RemoveListener(EventNameSaver.OnCoinColleted, AdjustDifficulty);
-            EventManager.Instance.RemoveListener(EventNameSaver.OnPlayerDeath, StopAllCoroutines);
+            EventManager.Instance.RemoveListener(EventNameSaver.OnGameOver, StopAllCoroutines);
         }
 
-        private void StartLasers()
+        public void StartLasers()
         {
             _difficultMultiplier = 0.1f;
             DifficultyMultiplier.ResetDifficulty();

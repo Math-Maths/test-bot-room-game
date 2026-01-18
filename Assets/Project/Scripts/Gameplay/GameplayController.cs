@@ -1,42 +1,72 @@
 using UnityEngine;
 using Unity.Cinemachine;
+using UnityEngine.Experimental.GlobalIllumination;
+using TestBotRoom.UI;
+using UnityEngine.SocialPlatforms.Impl;
+using TestBotRoom.Gameplay;
 
 namespace TestBotRoom
 {
     public class GameplayController : MonoBehaviour
     {
-        [SerializeField] private PlayerController playerPrefab;
-        [SerializeField] private CinemachineCamera followPlayerCamera;
+        [SerializeField] private PlayerController _playerInstance;
+        [SerializeField] private CinemachineCamera _followPlayerCamera;
+        [SerializeField] private Light _sunLight;
+        [SerializeField] private Light _roomLight;
+        [SerializeField] private Camera _mainCamera;
+        [SerializeField] private GameplayUIControl _gameplayUIControl;
+        [SerializeField] private CoinSpawner _coinSpawner;
+        [SerializeField] private LaserSpawner _laserSpawner;
 
-        [Header("Time to Start Gameplay")]
-        [SerializeField] private float delayTime;
+        private ScoreSystem _scoreSystem;
 
-        private PlayerController _playerInstance;
+        private async void Start()
+        {
+            BindObjects();
+            //Show some loading screen
+            await InitialiazeObjects();
+        }
+
+        private void BindObjects()
+        {
+            _scoreSystem = GetComponent<ScoreSystem>();
+            _playerInstance = Instantiate(_playerInstance);
+            _mainCamera = Instantiate(_mainCamera);
+            _followPlayerCamera = Instantiate(_followPlayerCamera);
+            _sunLight = Instantiate(_sunLight);
+            _coinSpawner = Instantiate(_coinSpawner);
+            _laserSpawner = Instantiate(_laserSpawner);
+            _gameplayUIControl = Instantiate(_gameplayUIControl);
+            _roomLight = Instantiate(_roomLight);
+        }
+
+        private async Awaitable InitialiazeObjects()
+        {
+            _playerInstance.OnInitiate();
+            _coinSpawner.OnInitiate();
+            _laserSpawner.OnInitiate();
+            _scoreSystem.OnInitiate();
+            _gameplayUIControl.OnInitiate();
+        }
+
+        private void PrepareGameplay()
+        {
+            _followPlayerCamera.LookAt = _playerInstance.transform;
+        }
 
         private void OnEnable()
         {
-            EventManager.Instance.AddListener(EventNameSaver.OnGameStarts, StarResetGameplay);
+            EventManager.Instance.AddListener(EventNameSaver.OnGameOver, OnGameplayEnd);
         }
 
         private void OnDisable()
         {
-            EventManager.Instance.RemoveListener(EventNameSaver.OnGameStarts, StarResetGameplay);
+            EventManager.Instance.RemoveListener(EventNameSaver.OnGameOver, OnGameplayEnd);
         }
 
-        public void StarResetGameplay()
+        private void OnGameplayEnd()
         {
-            if (_playerInstance == null)
-            {
-                _playerInstance = Instantiate(playerPrefab);
-                _playerInstance.InitializePlayer();
-            }
-            else
-            {
-                _playerInstance.InitializePlayer();
-                _playerInstance.gameObject.SetActive(true);
-            }
-
-            followPlayerCamera.LookAt = _playerInstance.transform;
+            
         }
     }
 }

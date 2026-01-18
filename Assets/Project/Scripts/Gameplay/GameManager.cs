@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace TestBotRoom
 {
@@ -24,18 +25,12 @@ namespace TestBotRoom
 
         private void OnEnable()
         {
-            EventManager.Instance.AddListener(EventNameSaver.OnPlayerDeath, PlayerDeath);
+            
         }
 
         private void OnDisable()
         {
-            EventManager.Instance.RemoveListener(EventNameSaver.OnPlayerDeath, PlayerDeath);
-        }
-
-        private void PlayerDeath()
-        {
-            EventManager.Instance.Invoke(EventNameSaver.OnGameOver);
-            _currentGameState = GameState.GameOver;
+            
         }
 
         public void StartGamePlay()
@@ -44,6 +39,11 @@ namespace TestBotRoom
             EventManager.Instance.Invoke(EventNameSaver.OnGameStarts);
         }
 
+    }
+
+    public class SaveLoadSystem
+    {
+        
     }
 
     public enum GameState
