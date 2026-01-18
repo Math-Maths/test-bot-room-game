@@ -3077,6 +3077,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8401190533671368744}
+  - component: {fileID: 6583088646846233326}
   m_Layer: 0
   m_Name: Lab Scenario
   m_TagString: Untagged
@@ -3108,6 +3109,30 @@ Transform:
   - {fileID: 7534418815224308505}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
+--- !u!114 &6583088646846233326
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2299595725547759448}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 28a3f1b5a2e7799489d119079619f23d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  laserPrefab: {fileID: 4448551913869370110, guid: 69eee393aa9482b43a736f14a86cadb5, type: 3}
+  spawnPositions:
+  - {fileID: 7999342416426756105}
+  - {fileID: 1638801575850919364}
+  - {fileID: 7221003831577257375}
+  - {fileID: 5140265223649342067}
+  timeBetweenSpanw: 1
+  minSpawnTime: 0.5
+  maxLaserSpeed: 5
+  minLaserSpeed: 3
+  maxLaserAnimationTime: 0
+  minLaserAnimationTime: 0
 --- !u!1 &2358203114980429206
 GameObject:
   m_ObjectHideFlags: 0
