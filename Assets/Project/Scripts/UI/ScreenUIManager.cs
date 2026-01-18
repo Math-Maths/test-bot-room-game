@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 namespace TestBotRoom.UI
@@ -13,9 +14,15 @@ namespace TestBotRoom.UI
 
         private void EnableStartScreen()
         {
-            Debug.Log("Reset");
+            StartCoroutine(EnableStartScreenCoroutine());
+        }
+
+        IEnumerator EnableStartScreenCoroutine()
+        {
+            yield return new WaitForSeconds(3f);
             startScreen.SetActive(true);
         }
+
 
     }
 }
