@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: a8633181efdf790428101f2d78799510
+guid: 6f1bc9ce64e072c47a7e3e6d3cd7ebc6
 ModelImporter:
   serializedVersion: 22200
   internalIDToNameTable: []
@@ -7,8 +7,13 @@ ModelImporter:
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
-      name: roomtest_scene.vox Material
-    second: {fileID: 2100000, guid: d5c7d4c7fb30b034f91b54cf1f275df3, type: 2}
+      name: player_main_walk_material
+    second: {fileID: -876546973899608171, guid: de78628dde9fa084c833c1535aa58eeb, type: 3}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: rosto_walk
+    second: {fileID: -876546973899608171, guid: de78628dde9fa084c833c1535aa58eeb, type: 3}
   materials:
     materialImportMode: 2
     materialName: 0
@@ -38,7 +43,7 @@ ModelImporter:
     isReadable: 0
   meshes:
     lODScreenPercentages: []
-    globalScale: 1
+    globalScale: 0.75
     meshCompression: 0
     addColliders: 0
     useSRGBMaterialColor: 1
@@ -93,7 +98,7 @@ ModelImporter:
     armStretch: 0.05
     legStretch: 0.05
     feetSpacing: 0
-    globalScale: 1
+    globalScale: 0.0075
     rootMotionBoneName: 
     hasTranslationDoF: 0
     hasExtraRoot: 0
