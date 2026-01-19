@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace TestBotRoom
+namespace TestBotRoom.Gameplay
 {
     public class CoinSpawner : MonoBehaviour, IInitiation
     {
@@ -27,6 +27,7 @@ namespace TestBotRoom
             float randomZ = Random.Range(-mapLenght, mapLenght);
             Vector3 finalPosition = new Vector3(randomX, coinHeight, randomZ);
             _currentCoin = Instantiate(coinPrefab, finalPosition, Quaternion.identity);
+            _currentCoin.SpawnAnimation();
         }
 
         private void ChangeCoinPosition()
@@ -37,6 +38,7 @@ namespace TestBotRoom
             float randomX = Random.Range(-mapWidth, mapLenght);
             float randomZ = Random.Range(-mapLenght, mapLenght);
             _currentCoin.transform.position = new Vector3(randomX, _currentCoin.transform.position.y, randomZ);
+            _currentCoin.SpawnAnimation();
         }
 
     }

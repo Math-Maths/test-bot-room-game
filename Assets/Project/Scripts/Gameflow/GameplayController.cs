@@ -25,6 +25,9 @@ namespace TestBotRoom
             BindObjects();
             //Show some loading screen
             await InitialiazeObjects();
+            PrepareGameplay();
+            //Hide loading screen
+            StartGamePlay();
         }
 
         private void BindObjects()
@@ -51,7 +54,18 @@ namespace TestBotRoom
 
         private void PrepareGameplay()
         {
+            _playerInstance.transform.position = Vector3.zero;
             _followPlayerCamera.LookAt = _playerInstance.transform;
+        }
+
+        private void StartGamePlay()
+        {
+            _playerInstance.StartGamePlay();
+            _coinSpawner.CreateACoin();
+            //_scoreSystem.StartGamePlay();
+            //_gameplayUIControl.StartGamePlay();
+            GameManager.Instance.StartGamePlay();
+            _laserSpawner.StartLasers();
         }
 
         private void OnEnable()

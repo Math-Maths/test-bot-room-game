@@ -8,6 +8,7 @@ namespace TestBotRoom
         public static GameManager Instance {get; private set;}
 
         private GameState _currentGameState;
+        private DataManager _dataManager;
 
         public GameState CurrentGameState
         {
@@ -21,6 +22,8 @@ namespace TestBotRoom
             else Destroy(gameObject);
 
             DontDestroyOnLoad(gameObject); 
+
+            _dataManager = GetComponent<DataManager>();
         }
 
         private void OnEnable()
@@ -39,11 +42,6 @@ namespace TestBotRoom
             EventManager.Instance.Invoke(EventNameSaver.OnGameStarts);
         }
 
-    }
-
-    public class SaveLoadSystem
-    {
-        
     }
 
     public enum GameState

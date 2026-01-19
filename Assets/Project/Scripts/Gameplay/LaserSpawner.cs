@@ -2,7 +2,7 @@ using System.Collections;
 using TestBotRoom.Utils;
 using UnityEngine;
 
-namespace TestBotRoom
+namespace TestBotRoom.Gameplay
 {
     public class LaserSpawner : MonoBehaviour, IInitiation
     {
@@ -23,6 +23,8 @@ namespace TestBotRoom
 
         public void OnInitiate()
         {
+            _difficultMultiplier = 0.1f;
+            DifficultyMultiplier.ResetDifficulty();
             EventManager.Instance.AddListener(EventNameSaver.OnCoinColleted, AdjustDifficulty);
             EventManager.Instance.AddListener(EventNameSaver.OnGameOver, StopAllCoroutines);
         }
@@ -35,8 +37,6 @@ namespace TestBotRoom
 
         public void StartLasers()
         {
-            _difficultMultiplier = 0.1f;
-            DifficultyMultiplier.ResetDifficulty();
             StartCoroutine(SpawnSequence());
         }
 
@@ -67,7 +67,7 @@ namespace TestBotRoom
         private void AdjustDifficulty()
         {  
             _difficultMultiplier = DifficultyMultiplier.GetDifficulty();
-            Debug.Log("Difficulty: " + _difficultMultiplier);
+            //Debug.Log("Difficulty: " + _difficultMultiplier);
         }
 
     }

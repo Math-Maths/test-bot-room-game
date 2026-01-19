@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace TestBotRoom
+namespace TestBotRoom.Gameplay
 {
     public class LaserBehavior : MonoBehaviour
     {

@@ -3,7 +3,7 @@ using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-namespace TestBotRoom
+namespace TestBotRoom.Gameplay
 {
     [RequireComponent(typeof(PlayerInput))]
     [RequireComponent(typeof(CharacterController))]
@@ -42,7 +42,6 @@ namespace TestBotRoom
 
         public void StartGamePlay()
         {
-            transform.Translate(Vector3.zero, Space.World);
             _canMove = true;   
             ShotAnimation("Player Idle");
         }
