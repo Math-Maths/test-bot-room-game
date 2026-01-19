@@ -1,4 +1,4 @@
-using TestBotRoom;
+using TestBotRoom.Gameplay;
 using UnityEngine;
 
 public class OnFinish : StateMachineBehaviour
@@ -8,7 +8,7 @@ public class OnFinish : StateMachineBehaviour
     // OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        Debug.Log(stateInfo.length);
+        //Debug.Log(stateInfo.length);
         animator.GetComponentInParent<PlayerController>().ShotAnimation(animationName, stateInfo.length);
     }
 }

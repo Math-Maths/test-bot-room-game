@@ -27,7 +27,7 @@ namespace TestBotRoom.UI
 
         private void UpdateBestScore(int value)
         {
-            bestScoreText.text = value.ToString("000");
+            //bestScoreText.text = value.ToString("000");
         }
     }
 }
