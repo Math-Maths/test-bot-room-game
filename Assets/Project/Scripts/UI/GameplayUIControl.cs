@@ -5,7 +5,12 @@ namespace TestBotRoom.UI
 {
     public class GameplayUIControl : MonoBehaviour, IInitiation
     {
-        [SerializeField] private TMP_Text worldScoreText;
+        [Header("World UI Elements")]
+        [SerializeField] private TMP_Text currentScoreText_World;
+
+        [Header("End Screen UI Elements")]
+        [SerializeField] private GameObject endScreenPanel;
+        [SerializeField] private TMP_Text currentScoreText;
         [SerializeField] private TMP_Text bestScoreText;
 
         public void OnInitiate()
@@ -22,12 +27,23 @@ namespace TestBotRoom.UI
 
         private void UpdateScore(int value)
         {
-            worldScoreText.text = value.ToString("000");
+            currentScoreText_World.text = value.ToString("000");
         }
 
         private void UpdateBestScore(int value)
         {
-            //bestScoreText.text = value.ToString("000");
+            bestScoreText.text = value.ToString("000");
+        }
+
+        public void CallEvent(string eventName)
+        {
+            EventManager.Instance.Invoke(eventName);
+        }
+
+        public void ShowEndScreen(int finalScore)
+        {
+            currentScoreText.text = finalScore.ToString("000");
+            endScreenPanel.SetActive(true);
         }
     }
 }

@@ -62,8 +62,6 @@ namespace TestBotRoom
         {
             _playerInstance.StartGamePlay();
             _coinSpawner.CreateACoin();
-            //_scoreSystem.StartGamePlay();
-            //_gameplayUIControl.StartGamePlay();
             GameManager.Instance.StartGamePlay();
             _laserSpawner.StartLasers();
         }
@@ -80,7 +78,7 @@ namespace TestBotRoom
 
         private void OnGameplayEnd()
         {
-            
+            _gameplayUIControl.ShowEndScreen(_scoreSystem.CurrentScore);
         }
     }
 }

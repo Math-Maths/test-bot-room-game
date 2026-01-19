@@ -7,6 +7,9 @@ namespace TestBotRoom.Gameplay
         private int _currentScore;
         private int _bestScore;
 
+        public int CurrentScore => _currentScore;
+        public int BestScore => _bestScore;
+
         public void OnInitiate()
         {
             EventManager.Instance.AddListener(EventNameSaver.OnCoinColleted, OnCoinCollected);
@@ -31,13 +34,8 @@ namespace TestBotRoom.Gameplay
             if (_currentScore > _bestScore)
             {
                 _bestScore = _currentScore;
-
                 EventManager.Instance.Invoke(EventNameSaver.OnBestScoreChanged, _bestScore);
             }
-
-            _currentScore = 0;
-
-            EventManager.Instance.Invoke(EventNameSaver.OnScoreChanged, _currentScore);
         }
     }
 }
