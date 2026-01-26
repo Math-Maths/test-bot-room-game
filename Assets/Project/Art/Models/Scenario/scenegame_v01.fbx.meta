@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 64cfe77f053f1144a9bd3fd244c17786
+guid: a8633181efdf790428101f2d78799510
 ModelImporter:
   serializedVersion: 22200
   internalIDToNameTable: []
@@ -7,8 +7,8 @@ ModelImporter:
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
-      name: player_main_idle.vox Material.001
-    second: {fileID: -876546973899608171, guid: de78628dde9fa084c833c1535aa58eeb, type: 3}
+      name: roomtest_scene.vox Material
+    second: {fileID: -876546973899608171, guid: 3fba13265ca8a3b44a3d694cd9ceb4c0, type: 3}
   materials:
     materialImportMode: 2
     materialName: 0

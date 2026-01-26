@@ -8,7 +8,7 @@ ModelImporter:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
       name: face_death_1
-    second: {fileID: -876546973899608171, guid: de78628dde9fa084c833c1535aa58eeb, type: 3}
+    second: {fileID: 2100000, guid: e9b4d4955aa75b1409ab826b30f8baf2, type: 2}
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
