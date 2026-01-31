@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: a57df9e4fc17ba949994b735c2269c4b
+guid: f860058d11dd27b4c96c9d43931dcd41
 ModelImporter:
   serializedVersion: 22200
   internalIDToNameTable: []
@@ -7,13 +7,43 @@ ModelImporter:
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
-      name: face_jump-rest
-    second: {fileID: 2100000, guid: e9b4d4955aa75b1409ab826b30f8baf2, type: 2}
+      name: laserbeam_pane_
+    second: {fileID: 2100000, guid: 4b762be0600cd414da8d28df1cced778, type: 2}
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
-      name: player_main_jump-rest_material
-    second: {fileID: -876546973899608171, guid: de78628dde9fa084c833c1535aa58eeb, type: 3}
+      name: scenegame_ground_material
+    second: {fileID: 2100000, guid: 1a3b470dd25e50b4aa3e9fa3d65ecd3d, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: scenegame_leaserbeam_
+    second: {fileID: 2100000, guid: 84b32413e18d3474abfb0f199a692270, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: scenegame_tableassets_
+    second: {fileID: 2100000, guid: a99d267d8634b84438a5d51e783f1c49, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: scenegame_torretlaser_
+    second: {fileID: 2100000, guid: 977eddf27debf684ea58b787e2adf9fc, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: scenegame_vertexcolor_texture_
+    second: {fileID: 2100000, guid: 678ce7d4a1c202646852457f1aa372dc, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: scenegame_walls_
+    second: {fileID: 2100000, guid: ef705f1d56bc69949bbe2b1418be0b32, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: scenegame_widescreen_
+    second: {fileID: 2100000, guid: c07de4fc8765ba44f917af68495d2f24, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0
@@ -43,8 +73,8 @@ ModelImporter:
     isReadable: 0
   meshes:
     lODScreenPercentages: []
-    globalScale: 0.72
-    meshCompression: 0
+    globalScale: 1
+    meshCompression: 3
     addColliders: 0
     useSRGBMaterialColor: 1
     sortHierarchyByName: 1
@@ -98,7 +128,7 @@ ModelImporter:
     armStretch: 0.05
     legStretch: 0.05
     feetSpacing: 0
-    globalScale: 0.0072000003
+    globalScale: 1
     rootMotionBoneName: 
     hasTranslationDoF: 0
     hasExtraRoot: 0
