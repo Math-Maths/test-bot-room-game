@@ -1,27 +1,46 @@
-using System;
-using TestBotRoom.Utils;
 using UnityEngine;
+using TestBotRoom.Utils;
 
 namespace TestBotRoom.Gameplay
 {
     public class CoinBehavior : MonoBehaviour
     {
+        [Header("Rotation")]
         [SerializeField] private float rotationSpeed = 50f;
-        [SerializeField] private float floatAmplitude = 0.5f;
-        [SerializeField] private float floatFrequency = 1f;
+
+        [Header("Floating")]
+        [SerializeField] private float minHeightOffset = -0.2f;
+        [SerializeField] private float maxHeightOffset = 0.2f;
+        [SerializeField] private float floatSpeed = 1f;
+
+        [Header("Spawn")]
         [SerializeField] private float scaleTime = 0.5f;
+
+        private float _startY;
+
+        private void Awake()
+        {
+            _startY = transform.position.y;
+        }
 
         private void Update()
         {
-            // Rotate the coin
-            transform.Rotate(Vector3.up, rotationSpeed * Time.deltaTime);
-
-            // Float the coin up and down
-            Vector3 position = transform.position;
-            position.y += Mathf.Sin(Time.time * floatFrequency) * floatAmplitude * Time.deltaTime;
-            transform.position = position;
+            Rotate();
+            Float();
         }
 
+        private void Rotate()
+        {
+            transform.Rotate(Vector3.up, rotationSpeed * Time.deltaTime);
+        }
+
+        private void Float()
+        {
+            float t = (Mathf.Sin(Time.time * floatSpeed) + 1f) * 0.5f; // 0 → 1
+            float y = Mathf.Lerp(_startY + minHeightOffset, _startY + maxHeightOffset, t);
+
+            transform.position = new Vector3(transform.position.x, y, transform.position.z);
+        }
 
         private void OnTriggerEnter(Collider other)
         {
@@ -32,7 +51,8 @@ namespace TestBotRoom.Gameplay
         public void SpawnAnimation()
         {
             transform.localScale = Vector3.zero;
-            LeanTween.scale(gameObject, Vector3.one * 0.4f, scaleTime).setEaseInOutBack();
+            LeanTween.scale(gameObject, Vector3.one * 0.4f, scaleTime)
+                     .setEaseInOutBack();
         }
     }
 }

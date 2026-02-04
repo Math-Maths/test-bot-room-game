@@ -1,8 +1,6 @@
 using UnityEngine;
 using Unity.Cinemachine;
-using UnityEngine.Experimental.GlobalIllumination;
 using TestBotRoom.UI;
-using UnityEngine.SocialPlatforms.Impl;
 using TestBotRoom.Gameplay;
 using System.Threading.Tasks;
 
