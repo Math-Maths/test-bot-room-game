@@ -1,5 +1,6 @@
 using System.Collections;
 using TestBotRoom.Utils;
+using Unity.VisualScripting;
 using UnityEngine;
 
 namespace TestBotRoom.Gameplay
@@ -13,6 +14,7 @@ namespace TestBotRoom.Gameplay
         [SerializeField] private float minSpawnTime;
         [SerializeField] private float maxLaserSpeed;
         [SerializeField] private float minLaserSpeed;
+        [SerializeField] private int laserPoolSize;
 
         [Space(10)]
         [Header("Antecipation Laser Animation Settings")]
@@ -20,23 +22,32 @@ namespace TestBotRoom.Gameplay
         [SerializeField] private float minLaserAnimationTime;
 
         private float _difficultMultiplier;
+        
+        private const string LASER_POOL_ID = "LaserPool";
 
         public void OnInitiate()
         {
-            _difficultMultiplier = 0.1f;
-            DifficultyMultiplier.ResetDifficulty();
             EventManager.Instance.AddListener(EventNameSaver.OnCoinColleted, AdjustDifficulty);
             EventManager.Instance.AddListener(EventNameSaver.OnGameOver, StopAllCoroutines);
+            EventManager.Instance.AddListener(EventNameSaver.OnGameOver, DisableAllLasers);
+
+            _difficultMultiplier = 0.1f;
+            DifficultyMultiplier.ResetDifficulty();
+
+            PoolService.Instance.CreatePool(LASER_POOL_ID, laserPrefab.gameObject, laserPoolSize);
         }
 
         private void OnDisable()
         {
             EventManager.Instance.RemoveListener(EventNameSaver.OnCoinColleted, AdjustDifficulty);
             EventManager.Instance.RemoveListener(EventNameSaver.OnGameOver, StopAllCoroutines);
+            EventManager.Instance.AddListener(EventNameSaver.OnGameOver, DisableAllLasers);
         }
 
         public void StartLasers()
         {
+            DifficultyMultiplier.ResetDifficulty();
+            _difficultMultiplier = 0.1f;
             StartCoroutine(SpawnSequence());
         }
 
@@ -57,11 +68,17 @@ namespace TestBotRoom.Gameplay
                 yield return new WaitForSeconds(laserScaleTime);
 
                 // Instantiate laser
-                LaserBehavior laser = Instantiate(laserPrefab, spawnPositions[randomPosition].position, spawnPositions[randomPosition].rotation);
+                GameObject laserGO = PoolService.Instance.Spawn(LASER_POOL_ID, spawnPositions[randomPosition].position, spawnPositions[randomPosition].rotation);
+                LaserBehavior laser = laserGO.GetComponent<LaserBehavior>();
                 float currentSpeed = Mathf.Lerp(minLaserSpeed, maxLaserSpeed, _difficultMultiplier);
                 //Debug.Log("Current Speed: " + currentSpeed);
                 laser.InitializeLaser(spawnPositions[randomPosition].forward, currentSpeed);
             }
+        }
+
+        private void DisableAllLasers()
+        {
+            PoolService.Instance.DespawnAll(LASER_POOL_ID); 
         }
 
         private void AdjustDifficulty()
