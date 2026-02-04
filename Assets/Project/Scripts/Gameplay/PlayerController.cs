@@ -42,7 +42,9 @@ namespace TestBotRoom.Gameplay
 
         public void StartGamePlay()
         {
-            _canMove = true;   
+            _canMove = true;  
+            _playerInput.enabled = true;
+            _controller.enabled = true;
             ShotAnimation("Player Idle");
         }
 
@@ -137,6 +139,17 @@ namespace TestBotRoom.Gameplay
                     return;
                 _currentAnimation = animationName;
             }
+        }
+
+        public void ResetPosition()
+        {
+            _canMove = false;
+            _playerVelocity = Vector3.zero;
+            _playerInput.enabled = false;
+            _controller.enabled = false;
+            transform.position = Vector3.zero;
+            transform.rotation = Quaternion.identity;
+            ShotAnimation("Player Idle");
         }
 
         private void OnTriggerEnter(Collider other)
