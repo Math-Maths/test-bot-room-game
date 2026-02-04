@@ -37,5 +37,11 @@ namespace TestBotRoom.Gameplay
                 EventManager.Instance.Invoke(EventNameSaver.OnBestScoreChanged, _bestScore);
             }
         }
+
+        public void ResetScore()
+        {
+            _currentScore = 0;
+            EventManager.Instance.Invoke(EventNameSaver.OnScoreChanged, _currentScore);
+        }
     }
 }
