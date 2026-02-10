@@ -22,6 +22,11 @@ namespace TestBotRoom.Gameplay
             EventManager.Instance.RemoveListener(EventNameSaver.OnGameOver, OnGameOver);
         }
 
+        public void PrepareScore(int currentBestScore)
+        {
+            _bestScore = currentBestScore;
+        }
+
         private void OnCoinCollected()
         {
             _currentScore++;
@@ -34,8 +39,9 @@ namespace TestBotRoom.Gameplay
             if (_currentScore > _bestScore)
             {
                 _bestScore = _currentScore;
-                EventManager.Instance.Invoke(EventNameSaver.OnBestScoreChanged, _bestScore);
             }
+
+            EventManager.Instance.Invoke(EventNameSaver.OnBestScoreChanged, _bestScore);
         }
 
         public void ResetScore()

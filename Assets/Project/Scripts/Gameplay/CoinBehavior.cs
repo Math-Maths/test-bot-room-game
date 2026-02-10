@@ -17,10 +17,12 @@ namespace TestBotRoom.Gameplay
         [SerializeField] private float scaleTime = 0.5f;
 
         private float _startY;
+        private Collider _collider;
 
         private void Awake()
         {
             _startY = transform.position.y;
+            _collider = GetComponent<Collider>();
         }
 
         private void Update()
@@ -50,9 +52,19 @@ namespace TestBotRoom.Gameplay
 
         public void SpawnAnimation()
         {
+            if (_collider != null)
+                _collider.enabled = false;
+
             transform.localScale = Vector3.zero;
+
             LeanTween.scale(gameObject, Vector3.one * 0.4f, scaleTime)
-                     .setEaseInOutBack();
+             .setEaseInOutBack()
+             .setOnComplete(() =>
+            {
+                // Re-enable collider after animation
+                if (_collider != null)
+                    _collider.enabled = true;
+            });
         }
     }
 }
