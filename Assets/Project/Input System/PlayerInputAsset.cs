@@ -113,13 +113,22 @@ namespace TestBotRoom
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""Revive - Debug"",
+                    ""name"": ""Clicking"",
                     ""type"": ""Button"",
-                    ""id"": ""2492b77d-59e6-4c23-9281-7e00b56abfa6"",
+                    ""id"": ""53e6e299-8bc5-4fa6-9eda-844ee09f9855"",
                     ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Dragging"",
+                    ""type"": ""Value"",
+                    ""id"": ""cef72f2e-1376-4990-a80e-e135721c9e2e"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
                 }
             ],
             ""bindings"": [
@@ -213,12 +222,34 @@ namespace TestBotRoom
                 },
                 {
                     ""name"": """",
-                    ""id"": ""5e24ddf7-b891-42c9-aee5-99257fbf299b"",
-                    ""path"": ""<Keyboard>/k"",
+                    ""id"": ""d817d803-2df1-4a70-be3c-f9b5258a50ff"",
+                    ""path"": ""<Touchscreen>/Press"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Revive - Debug"",
+                    ""action"": ""Clicking"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""aeab5691-7fb0-4977-b081-8a6aa96e1212"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Clicking"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""786fde56-b066-4bba-a09c-11685bad23ec"",
+                    ""path"": ""<Pointer>/delta"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Dragging"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -231,7 +262,8 @@ namespace TestBotRoom
             m_Base = asset.FindActionMap("Base", throwIfNotFound: true);
             m_Base_Move = m_Base.FindAction("Move", throwIfNotFound: true);
             m_Base_Jump = m_Base.FindAction("Jump", throwIfNotFound: true);
-            m_Base_ReviveDebug = m_Base.FindAction("Revive - Debug", throwIfNotFound: true);
+            m_Base_Clicking = m_Base.FindAction("Clicking", throwIfNotFound: true);
+            m_Base_Dragging = m_Base.FindAction("Dragging", throwIfNotFound: true);
         }
 
         ~@PlayerInputAsset()
@@ -314,7 +346,8 @@ namespace TestBotRoom
         private List<IBaseActions> m_BaseActionsCallbackInterfaces = new List<IBaseActions>();
         private readonly InputAction m_Base_Move;
         private readonly InputAction m_Base_Jump;
-        private readonly InputAction m_Base_ReviveDebug;
+        private readonly InputAction m_Base_Clicking;
+        private readonly InputAction m_Base_Dragging;
         /// <summary>
         /// Provides access to input actions defined in input action map "Base".
         /// </summary>
@@ -335,9 +368,13 @@ namespace TestBotRoom
             /// </summary>
             public InputAction @Jump => m_Wrapper.m_Base_Jump;
             /// <summary>
-            /// Provides access to the underlying input action "Base/ReviveDebug".
+            /// Provides access to the underlying input action "Base/Clicking".
             /// </summary>
-            public InputAction @ReviveDebug => m_Wrapper.m_Base_ReviveDebug;
+            public InputAction @Clicking => m_Wrapper.m_Base_Clicking;
+            /// <summary>
+            /// Provides access to the underlying input action "Base/Dragging".
+            /// </summary>
+            public InputAction @Dragging => m_Wrapper.m_Base_Dragging;
             /// <summary>
             /// Provides access to the underlying input action map instance.
             /// </summary>
@@ -370,9 +407,12 @@ namespace TestBotRoom
                 @Jump.started += instance.OnJump;
                 @Jump.performed += instance.OnJump;
                 @Jump.canceled += instance.OnJump;
-                @ReviveDebug.started += instance.OnReviveDebug;
-                @ReviveDebug.performed += instance.OnReviveDebug;
-                @ReviveDebug.canceled += instance.OnReviveDebug;
+                @Clicking.started += instance.OnClicking;
+                @Clicking.performed += instance.OnClicking;
+                @Clicking.canceled += instance.OnClicking;
+                @Dragging.started += instance.OnDragging;
+                @Dragging.performed += instance.OnDragging;
+                @Dragging.canceled += instance.OnDragging;
             }
 
             /// <summary>
@@ -390,9 +430,12 @@ namespace TestBotRoom
                 @Jump.started -= instance.OnJump;
                 @Jump.performed -= instance.OnJump;
                 @Jump.canceled -= instance.OnJump;
-                @ReviveDebug.started -= instance.OnReviveDebug;
-                @ReviveDebug.performed -= instance.OnReviveDebug;
-                @ReviveDebug.canceled -= instance.OnReviveDebug;
+                @Clicking.started -= instance.OnClicking;
+                @Clicking.performed -= instance.OnClicking;
+                @Clicking.canceled -= instance.OnClicking;
+                @Dragging.started -= instance.OnDragging;
+                @Dragging.performed -= instance.OnDragging;
+                @Dragging.canceled -= instance.OnDragging;
             }
 
             /// <summary>
@@ -448,12 +491,19 @@ namespace TestBotRoom
             /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
             void OnJump(InputAction.CallbackContext context);
             /// <summary>
-            /// Method invoked when associated input action "Revive - Debug" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+            /// Method invoked when associated input action "Clicking" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
             /// </summary>
             /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
             /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
             /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
-            void OnReviveDebug(InputAction.CallbackContext context);
+            void OnClicking(InputAction.CallbackContext context);
+            /// <summary>
+            /// Method invoked when associated input action "Dragging" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+            /// </summary>
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+            void OnDragging(InputAction.CallbackContext context);
         }
     }
 }

@@ -227,6 +227,7 @@ MonoBehaviour:
   _gameplayUIControl: {fileID: 4546714630955246881, guid: 14528346f2beae249bcc5bd46a7e4ebb, type: 3}
   _coinSpawner: {fileID: 1880221447424150696, guid: d57f73b9cb519944f81b74dbcc70d99d, type: 3}
   _laserSpawner: {fileID: 6583088646846233326, guid: ca9b5c7f3f1ec554687a413802bb8a89, type: 3}
+  _loadingScreen: {fileID: 3135046323479515980, guid: 5aa990d83b88abb4bb3e90f890d54338, type: 3}
   gameDelayStart: 3
 --- !u!4 &1220614833
 Transform:

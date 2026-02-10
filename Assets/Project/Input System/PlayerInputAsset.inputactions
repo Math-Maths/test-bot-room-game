@@ -25,13 +25,22 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "Revive - Debug",
+                    "name": "Clicking",
                     "type": "Button",
-                    "id": "2492b77d-59e6-4c23-9281-7e00b56abfa6",
+                    "id": "53e6e299-8bc5-4fa6-9eda-844ee09f9855",
                     "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "Dragging",
+                    "type": "Value",
+                    "id": "cef72f2e-1376-4990-a80e-e135721c9e2e",
+                    "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
                 }
             ],
             "bindings": [
@@ -125,12 +134,34 @@
                 },
                 {
                     "name": "",
-                    "id": "5e24ddf7-b891-42c9-aee5-99257fbf299b",
-                    "path": "<Keyboard>/k",
+                    "id": "d817d803-2df1-4a70-be3c-f9b5258a50ff",
+                    "path": "<Touchscreen>/Press",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Revive - Debug",
+                    "action": "Clicking",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "aeab5691-7fb0-4977-b081-8a6aa96e1212",
+                    "path": "<Mouse>/leftButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Clicking",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "786fde56-b066-4bba-a09c-11685bad23ec",
+                    "path": "<Pointer>/delta",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Dragging",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

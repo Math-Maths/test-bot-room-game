@@ -504,9 +504,9 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 7575382276520960365}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 549.8829, y: -167.52469}
   m_SizeDelta: {x: 607.528, y: 151.882}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &2141921436232552588
@@ -953,7 +953,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &7575382276520960365
 RectTransform:
   m_ObjectHideFlags: 0
@@ -3569,9 +3569,9 @@ RectTransform:
   - {fileID: 974870724874323590}
   m_Father: {fileID: 7575382276520960365}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 549.8829, y: -466.8338}
   m_SizeDelta: {x: 455.4645, y: 120.4015}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &4455479862953975989
@@ -4054,7 +4054,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 3765783661070844483}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 4546714630955246881}
+        m_TargetAssemblyTypeName: TestBotRoom.UI.GameplayUIControl, Assembly-CSharp
+        m_MethodName: CallEvent
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: GoToMenu
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &8363315528545630450
 MonoBehaviour:
   m_ObjectHideFlags: 0
