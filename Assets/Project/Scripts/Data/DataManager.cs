@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 
@@ -41,5 +42,7 @@ namespace TestBotRoom
         public int bestScore;
         public int coins;
         public int gears;
+        public List<string> unlockedCharacters;
+        public List<string> unlockedAchivements;
     }
 }
