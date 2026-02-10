@@ -8,5 +8,10 @@ static public class EventNameSaver
     public static string OnBestScoreChanged = "OnBestScoreChanged";
     public static string OnGameReset = "OnGameReset";
     public static string ProvisionalPlay = "ProvisionalPlayGame";
+    public static string GoToMenu = "GoToMenu";
+    #endregion
+
+    #region Menu Events
+    public static string GoToGameplay = "GoToGameplay";
     #endregion
 }
