@@ -14,16 +14,17 @@ namespace TestBotRoom
         private void OnEnable()
         {
             EventManager.Instance.AddListener(EventNameSaver.GoToGameplay, LoadGamePlay);
-        }
-
-        private void Start()
-        {
             BindObjects();
             //Show loading screen
             _loadingScreen.ShowLoadScreen();
             //Get Data from GameManager
             InitializeObjects();
             _loadingScreen.HideLoadingScreen();
+        }
+
+        private void OnDisable()
+        {
+            EventManager.Instance.RemoveListener(EventNameSaver.GoToGameplay, LoadGamePlay);
         }
 
         private void BindObjects()
