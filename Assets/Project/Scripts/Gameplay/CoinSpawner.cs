@@ -34,7 +34,7 @@ namespace TestBotRoom.Gameplay
             float randomX = Random.Range(-mapWidth, mapLenght);
             float randomZ = Random.Range(-mapLenght, mapLenght);
             Vector3 finalPosition = new Vector3(randomX, coinHeight, randomZ);
-            _currentCoin = Instantiate(coinPrefab, finalPosition, Quaternion.identity);
+            _currentCoin = Instantiate(coinPrefab, finalPosition, coinPrefab.transform.rotation);
             _currentCoin.SpawnAnimation();
         }
 

@@ -33,7 +33,7 @@ namespace TestBotRoom.Gameplay
 
         private void Rotate()
         {
-            transform.Rotate(Vector3.up, rotationSpeed * Time.deltaTime);
+            transform.Rotate(Vector3.forward, rotationSpeed * Time.deltaTime);
         }
 
         private void Float()
