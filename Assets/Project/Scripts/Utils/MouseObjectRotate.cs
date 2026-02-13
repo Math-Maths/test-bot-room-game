@@ -4,8 +4,9 @@ using UnityEngine.InputSystem;
 public class MouseObjectRotate : MonoBehaviour
 {
     [Header("Input")]
-    [SerializeField] private InputActionReference clickAction; // Button
-    [SerializeField] private InputActionReference dragAction;  // Vector2 (Mouse Delta)
+    [SerializeField] private InputActionReference clickAction; 
+    [SerializeField] private InputActionReference dragAction;
+    [SerializeField] private InputActionReference pointerAction;  
 
     [Header("Rotation")]
     [SerializeField] private float rotationSpeed = 0.2f;
@@ -31,6 +32,7 @@ public class MouseObjectRotate : MonoBehaviour
     {
         clickAction.action.Enable();
         dragAction.action.Enable();
+        pointerAction.action.Enable();
 
         clickAction.action.started += OnClickStarted;
         clickAction.action.canceled += OnClickCanceled;
@@ -43,6 +45,7 @@ public class MouseObjectRotate : MonoBehaviour
 
         clickAction.action.Disable();
         dragAction.action.Disable();
+        pointerAction.action.Disable();
     }
 
     private void Update()
@@ -53,7 +56,7 @@ public class MouseObjectRotate : MonoBehaviour
 
     private void OnClickStarted(InputAction.CallbackContext ctx)
     {
-        Vector2 mousePosition = Mouse.current.position.ReadValue();
+        Vector2 mousePosition = pointerAction.action.ReadValue<Vector2>();
         Ray ray = cam.ScreenPointToRay(mousePosition);
 
         if (Physics.Raycast(ray, out RaycastHit hit) && hit.transform == transform)
