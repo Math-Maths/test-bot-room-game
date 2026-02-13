@@ -142,6 +142,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   clickAction: {fileID: 1152936948759459179, guid: 9c04a7cafedb85e42bb296d78ea08f4b, type: 3}
   dragAction: {fileID: 445022756506760762, guid: 9c04a7cafedb85e42bb296d78ea08f4b, type: 3}
+  pointerAction: {fileID: -7146784012906183463, guid: 9c04a7cafedb85e42bb296d78ea08f4b, type: 3}
   rotationSpeed: 1
   resetDelay: 3
   resetSpeed: 2
