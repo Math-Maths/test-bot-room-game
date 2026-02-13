@@ -129,6 +129,15 @@ namespace TestBotRoom
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""Pointer"",
+                    ""type"": ""Value"",
+                    ""id"": ""124830e2-a9f2-47ba-adec-b05ec424aee8"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
                 }
             ],
             ""bindings"": [
@@ -244,12 +253,45 @@ namespace TestBotRoom
                 },
                 {
                     ""name"": """",
+                    ""id"": ""ed9c88bd-fad4-45f5-8439-e588da592805"",
+                    ""path"": ""<Touchscreen>/delta"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Dragging"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
                     ""id"": ""786fde56-b066-4bba-a09c-11685bad23ec"",
                     ""path"": ""<Pointer>/delta"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""Dragging"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""97a08dca-f3ae-4a3f-8a79-84b1d01e8f15"",
+                    ""path"": ""<Touchscreen>/position"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Pointer"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""86884854-7477-4119-a30b-ee20ff29329f"",
+                    ""path"": ""<Mouse>/position"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Pointer"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -264,6 +306,7 @@ namespace TestBotRoom
             m_Base_Jump = m_Base.FindAction("Jump", throwIfNotFound: true);
             m_Base_Clicking = m_Base.FindAction("Clicking", throwIfNotFound: true);
             m_Base_Dragging = m_Base.FindAction("Dragging", throwIfNotFound: true);
+            m_Base_Pointer = m_Base.FindAction("Pointer", throwIfNotFound: true);
         }
 
         ~@PlayerInputAsset()
@@ -348,6 +391,7 @@ namespace TestBotRoom
         private readonly InputAction m_Base_Jump;
         private readonly InputAction m_Base_Clicking;
         private readonly InputAction m_Base_Dragging;
+        private readonly InputAction m_Base_Pointer;
         /// <summary>
         /// Provides access to input actions defined in input action map "Base".
         /// </summary>
@@ -375,6 +419,10 @@ namespace TestBotRoom
             /// Provides access to the underlying input action "Base/Dragging".
             /// </summary>
             public InputAction @Dragging => m_Wrapper.m_Base_Dragging;
+            /// <summary>
+            /// Provides access to the underlying input action "Base/Pointer".
+            /// </summary>
+            public InputAction @Pointer => m_Wrapper.m_Base_Pointer;
             /// <summary>
             /// Provides access to the underlying input action map instance.
             /// </summary>
@@ -413,6 +461,9 @@ namespace TestBotRoom
                 @Dragging.started += instance.OnDragging;
                 @Dragging.performed += instance.OnDragging;
                 @Dragging.canceled += instance.OnDragging;
+                @Pointer.started += instance.OnPointer;
+                @Pointer.performed += instance.OnPointer;
+                @Pointer.canceled += instance.OnPointer;
             }
 
             /// <summary>
@@ -436,6 +487,9 @@ namespace TestBotRoom
                 @Dragging.started -= instance.OnDragging;
                 @Dragging.performed -= instance.OnDragging;
                 @Dragging.canceled -= instance.OnDragging;
+                @Pointer.started -= instance.OnPointer;
+                @Pointer.performed -= instance.OnPointer;
+                @Pointer.canceled -= instance.OnPointer;
             }
 
             /// <summary>
@@ -504,6 +558,13 @@ namespace TestBotRoom
             /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
             /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
             void OnDragging(InputAction.CallbackContext context);
+            /// <summary>
+            /// Method invoked when associated input action "Pointer" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+            /// </summary>
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+            void OnPointer(InputAction.CallbackContext context);
         }
     }
 }
