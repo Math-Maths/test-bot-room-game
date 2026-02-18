@@ -39,6 +39,8 @@ namespace TestBotRoom
         private void InitializeObjects()
         {
             _menuCanvas.Initialize(GetData());
+            _mainCamera.transform.position = new Vector3(0, 2.45f, -10);
+            _mainCamera.transform.rotation = Quaternion.Euler(Vector3.right * 9);
         }
 
         private void LoadGamePlay()
