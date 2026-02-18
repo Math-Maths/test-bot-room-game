@@ -1,7 +1,7 @@
 using System.Collections;
 using UnityEngine;
 
-public class ElasticScale : MonoBehaviour
+public class LaserVisualControl : MonoBehaviour
 {
     [Header("References")]
     [SerializeField] private Renderer targetRenderer;
@@ -14,40 +14,36 @@ public class ElasticScale : MonoBehaviour
     [Header("Color Settings")]
     [SerializeField] private Color baseColor = Color.white;
     [SerializeField] private Color warningColor = Color.red;
-    [SerializeField] private float timeUntilMaxColor;
+    [Tooltip("0-1: quanto da animação até atingir a cor máxima")]
+    [SerializeField] private float timeUntilMaxColor = 0.8f;
 
     [Header("Emission Settings")]
     [SerializeField] private Color baseEmission = Color.black;
-    [SerializeField] private Color warningEmission = Color.red;
+    [SerializeField] private Color warningEmission = new Color(3f, 0f, 0f); // HDR recomendado
 
     private Vector3 _originalScale;
     private Coroutine _currentRoutine;
-
     private MaterialPropertyBlock _mpb;
 
-    // Shader property ID (URP)
+    // Shader IDs
     private static readonly int BaseColorID = Shader.PropertyToID("_BaseColor");
     private static readonly int EmissionColorID = Shader.PropertyToID("_EmissionColor");
+    private static readonly int ChargeID = Shader.PropertyToID("_Charge");
 
     private void Awake()
     {
         _originalScale = transform.localScale;
-
         _mpb = new MaterialPropertyBlock();
 
-        // Segurança
         if (targetRenderer == null)
         {
             Debug.LogWarning($"{name} - Target Renderer não atribuído.");
             return;
         }
 
-        ApplyColor(baseColor, baseEmission);
+        ApplyVisual(0f, baseColor, baseEmission);
     }
 
-    /// <summary>
-    /// Plays the elastic scale animation using the given duration.
-    /// </summary>
     public void Play(float duration)
     {
         if (_currentRoutine != null)
@@ -62,12 +58,14 @@ public class ElasticScale : MonoBehaviour
 
         while (elapsed < duration)
         {
+            // ======================
+            // SCALE (elastic)
+            // ======================
             float t = elapsed / duration;
             t = Mathf.Clamp01((t + earlyStart) / (1f + earlyStart));
 
             float curve = ElasticImpulse(t);
 
-            // SCALE
             float scale = 1f + curve * (scaleMultiplier - 1f);
 
             transform.localScale = new Vector3(
@@ -76,18 +74,24 @@ public class ElasticScale : MonoBehaviour
                 _originalScale.z * scale
             );
 
-            // COLOR (progressivo, independente da elasticidade)
+            // ======================
+            // COLOR + EMISSION (linear)
+            // ======================
             float colorDuration = duration * timeUntilMaxColor;
             float colorT = Mathf.Clamp01(elapsed / colorDuration);
             colorT = Mathf.SmoothStep(0f, 1f, colorT);
 
-            // Base color
             Color currentBaseColor = Color.Lerp(baseColor, warningColor, colorT);
-
-            // Emission color
             Color currentEmission = Color.Lerp(baseEmission, warningEmission, colorT);
 
-            ApplyColor(currentBaseColor, currentEmission);
+            // ======================
+            // CHARGE (controla o shader)
+            // ======================
+            float charge = Mathf.Pow(Mathf.Clamp01(elapsed / duration), 2f);
+            charge = Mathf.SmoothStep(0f, 1f, charge);
+
+            // Aplicar tudo
+            ApplyVisual(charge, currentBaseColor, currentEmission);
 
             elapsed += Time.deltaTime;
             yield return null;
@@ -95,12 +99,12 @@ public class ElasticScale : MonoBehaviour
 
         // Reset
         transform.localScale = _originalScale;
-        ApplyColor(baseColor, baseEmission);
+        ApplyVisual(0f, baseColor, baseEmission);
 
         _currentRoutine = null;
     }
 
-    private void ApplyColor(Color baseCol, Color emissionCol)
+    private void ApplyVisual(float charge, Color baseCol, Color emissionCol)
     {
         if (targetRenderer == null)
             return;
@@ -109,6 +113,7 @@ public class ElasticScale : MonoBehaviour
 
         _mpb.SetColor(BaseColorID, baseCol);
         _mpb.SetColor(EmissionColorID, emissionCol);
+        _mpb.SetFloat(ChargeID, charge);
 
         targetRenderer.SetPropertyBlock(_mpb);
     }
