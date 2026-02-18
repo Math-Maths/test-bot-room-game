@@ -113,6 +113,12 @@ namespace TestBotRoom.Gameplay
 
         public void ShotAnimation(string animationName, float delay = 0f)
         {
+            if(GameManager.Instance.CurrentGameState != GameState.Gameplay)
+            {
+                StopCoroutine(WaitAndPlay());
+                return;
+            }
+
             if(delay > 0f)
             {
                 StartCoroutine(WaitAndPlay());
@@ -125,6 +131,9 @@ namespace TestBotRoom.Gameplay
             IEnumerator WaitAndPlay()
             {  
                 yield return new WaitForSeconds(delay);
+
+                if(_canMove == false) yield break;
+
                 ValidateAndPlay();
             }
 
@@ -156,9 +165,10 @@ namespace TestBotRoom.Gameplay
         {
             if(other.CompareTag("Laser"))
             {
+                ShotAnimation("Player Death");
+                transform.position = new Vector3(transform.position.x, 0, transform.position.z);
                 _canMove = false;
                 EventManager.Instance.Invoke(EventNameSaver.OnGameOver);
-                ShotAnimation("Player Death");
             }
         }
 
