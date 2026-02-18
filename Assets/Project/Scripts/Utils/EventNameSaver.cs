@@ -9,6 +9,7 @@ static public class EventNameSaver
     public static string OnGameReset = "OnGameReset";
     public static string ProvisionalPlay = "ProvisionalPlayGame";
     public static string GoToMenu = "GoToMenu";
+    public static string OnContinueGameplay = "OnContinueGameplay";
     #endregion
 
     #region Menu Events
