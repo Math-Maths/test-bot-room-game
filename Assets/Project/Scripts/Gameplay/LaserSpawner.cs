@@ -44,10 +44,13 @@ namespace TestBotRoom.Gameplay
             EventManager.Instance.AddListener(EventNameSaver.OnGameOver, DisableAllLasers);
         }
 
-        public void StartLasers()
+        public void StartLasers(bool reset = false)
         {
-            DifficultyMultiplier.ResetDifficulty();
-            _difficultMultiplier = 0.1f;
+            if(!reset)
+            {
+                DifficultyMultiplier.ResetDifficulty();
+                _difficultMultiplier = 0.1f;
+            }
             StartCoroutine(SpawnSequence());
         }
 
