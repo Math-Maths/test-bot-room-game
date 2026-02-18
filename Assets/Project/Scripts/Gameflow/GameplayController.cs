@@ -24,11 +24,14 @@ namespace TestBotRoom
         private ScoreSystem _scoreSystem;
         private GameStatus _gameplayStatus;
 
+        private bool _firstContinue;
+
         private void OnEnable()
         {
             EventManager.Instance.AddListener(EventNameSaver.OnGameOver, OnGameplayEnd);
             EventManager.Instance.AddListener(EventNameSaver.OnGameReset, ResetGamePlay);
             EventManager.Instance.AddListener(EventNameSaver.GoToMenu, GoToMainMenu);
+            EventManager.Instance.AddListener(EventNameSaver.OnContinueGameplay, ContinueGameplay);
 
             //Provisional
             //EventManager.Instance.AddListener(EventNameSaver.ProvisionalPlay, PlayProvisional);
@@ -39,6 +42,7 @@ namespace TestBotRoom
             EventManager.Instance.RemoveListener(EventNameSaver.OnGameOver, OnGameplayEnd);
             EventManager.Instance.RemoveListener(EventNameSaver.OnGameReset, ResetGamePlay);
             EventManager.Instance.RemoveListener(EventNameSaver.GoToMenu, GoToMainMenu);
+            EventManager.Instance.RemoveListener(EventNameSaver.OnContinueGameplay, ContinueGameplay);
 
             //Provisional
             //EventManager.Instance.RemoveListener(EventNameSaver.ProvisionalPlay, PlayProvisional);
@@ -93,6 +97,7 @@ namespace TestBotRoom
             _coinSpawner.CreateACoin();
             GameManager.Instance.StartGamePlay();
             _laserSpawner.StartLasers();
+            _firstContinue = true;
         }
 
         private void ResetGamePlay()
@@ -114,15 +119,41 @@ namespace TestBotRoom
             _playerInstance.StartGamePlay();
             _laserSpawner.StartLasers();
             _coinSpawner.CreateACoin();
+            _firstContinue = true;
+            _gameplayUIControl.ResetContinueButton();
+        }
+
+        private void ContinueGameplay()
+        {
+            _ = ContinueGameplayAsync();
+        }
+
+        private async Task ContinueGameplayAsync()
+        {
+            if(!_firstContinue)
+                return;
+
+            
+            //await play AD
+            _playerInstance.ResetPosition();
+            _followPlayerCamera.LookAt = _playerInstance.transform;
+
+            await _gameplayUIControl.ShowCountdown(gameDelayStart);
+            GameManager.Instance.StartGamePlay();
+            _playerInstance.StartGamePlay();
+            _laserSpawner.StartLasers(true);
+            _coinSpawner.CreateACoin();
+            _firstContinue = false;
         }
 
         private void OnGameplayEnd()
         {
-            _gameplayUIControl.ShowEndScreen(_scoreSystem.CurrentScore);
+            _gameplayUIControl.ShowEndScreen(_scoreSystem.CurrentScore, _firstContinue);
         }
 
         private void GoToMainMenu()
         {
+            _gameplayUIControl.ResetContinueButton();
             _loadingScreen.ShowLoadScreen();
             EndRunAndReport();
 

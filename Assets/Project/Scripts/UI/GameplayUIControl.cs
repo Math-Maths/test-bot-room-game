@@ -1,6 +1,8 @@
 using TMPro;
 using UnityEngine;
 using System.Threading.Tasks;
+using System.Collections;
+using UnityEngine.UI;
 
 namespace TestBotRoom.UI
 {
@@ -14,6 +16,10 @@ namespace TestBotRoom.UI
         [SerializeField] private GameObject endScreenPanel;
         [SerializeField] private TMP_Text currentScoreText;
         [SerializeField] private TMP_Text bestScoreText;
+        [SerializeField] private float endScreenDelay = 3f;
+        [SerializeField] private Image continueButton;
+        [SerializeField] private TMP_Text continueText;
+        [SerializeField] private Button buttonToContinue;
 
         [Space(10)]
         [Header("UI Controls")]
@@ -23,11 +29,18 @@ namespace TestBotRoom.UI
         [Header("Initial Gameplay Screen")]
         [SerializeField] private TMP_Text startDelayText;
 
+        private Color _continueButtonOriginalColor;
+        private Color _continueTextOriginalColor;
+
         public void OnInitiate()
         {
             EventManager.Instance.AddListener<int>(EventNameSaver.OnScoreChanged, UpdateScore);
             EventManager.Instance.AddListener<int>(EventNameSaver.OnBestScoreChanged, UpdateBestScore);
             EventManager.Instance.AddListener(EventNameSaver.OnGameOver, DisableControls);
+
+            _continueButtonOriginalColor = continueButton.color;
+            _continueTextOriginalColor = continueText.color;
+            buttonToContinue.enabled = true;
         }
 
         private void OnDisable()
@@ -72,15 +85,41 @@ namespace TestBotRoom.UI
             EventManager.Instance.Invoke(eventName);
         }
 
-        public void ShowEndScreen(int finalScore)
+        public void ShowEndScreen(int finalScore, bool canContinue = true)
         {
-            currentScoreText.text = finalScore.ToString("000");
-            endScreenPanel.SetActive(true);
+            StartCoroutine(showEndScreenAfterDelay(finalScore, canContinue));
         }
 
         public void DisableControls()
         {
             controlsPanel.SetActive(false);
+        }
+
+        public void ResetContinueButton()
+        {
+            continueButton.color = _continueButtonOriginalColor;
+            continueText.color = _continueTextOriginalColor;
+            buttonToContinue.enabled = true;
+        }
+
+        IEnumerator showEndScreenAfterDelay(int finalScore, bool canContinue)
+        {
+            yield return new WaitForSeconds(endScreenDelay);
+            if(!canContinue)
+            {
+                continueButton.color = Color.gray5;
+                continueText.color = Color.gray7;
+                buttonToContinue.enabled = false;
+            }
+            else
+            {
+                continueButton.color = _continueButtonOriginalColor;
+                continueText.color = _continueTextOriginalColor;
+                buttonToContinue.enabled = true;
+            }
+
+            currentScoreText.text = finalScore.ToString("000");
+            endScreenPanel.SetActive(true);
         }
     }
 }
