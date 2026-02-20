@@ -25,13 +25,31 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "Revive - Debug",
+                    "name": "Clicking",
                     "type": "Button",
-                    "id": "2492b77d-59e6-4c23-9281-7e00b56abfa6",
+                    "id": "53e6e299-8bc5-4fa6-9eda-844ee09f9855",
                     "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "Dragging",
+                    "type": "Value",
+                    "id": "cef72f2e-1376-4990-a80e-e135721c9e2e",
+                    "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                },
+                {
+                    "name": "Pointer",
+                    "type": "Value",
+                    "id": "124830e2-a9f2-47ba-adec-b05ec424aee8",
+                    "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
                 }
             ],
             "bindings": [
@@ -114,12 +132,78 @@
                 },
                 {
                     "name": "",
-                    "id": "5e24ddf7-b891-42c9-aee5-99257fbf299b",
-                    "path": "<Keyboard>/k",
+                    "id": "f1d636f1-60f6-43e2-93d2-b7fc7f839099",
+                    "path": "<Gamepad>/buttonSouth",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Revive - Debug",
+                    "action": "Jump",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "d817d803-2df1-4a70-be3c-f9b5258a50ff",
+                    "path": "<Touchscreen>/Press",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Clicking",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "aeab5691-7fb0-4977-b081-8a6aa96e1212",
+                    "path": "<Mouse>/leftButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Clicking",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "ed9c88bd-fad4-45f5-8439-e588da592805",
+                    "path": "<Touchscreen>/delta",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Dragging",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "786fde56-b066-4bba-a09c-11685bad23ec",
+                    "path": "<Pointer>/delta",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Dragging",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "97a08dca-f3ae-4a3f-8a79-84b1d01e8f15",
+                    "path": "<Touchscreen>/position",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Pointer",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "86884854-7477-4119-a30b-ee20ff29329f",
+                    "path": "<Mouse>/position",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Pointer",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

@@ -1,6 +1,18 @@
 static public class EventNameSaver
 {
+    #region Gameplay Events
     public static string OnGameOver = "OnGameOver";
-    public static string OnPlayerDeath = "OnPlayerDeath";
     public static string OnCoinColleted = "OnCoinColleted";
+    public static string OnGameStarts = "OnGameStarts";
+    public static string OnScoreChanged = "OnScoreChanged";
+    public static string OnBestScoreChanged = "OnBestScoreChanged";
+    public static string OnGameReset = "OnGameReset";
+    public static string ProvisionalPlay = "ProvisionalPlayGame";
+    public static string GoToMenu = "GoToMenu";
+    public static string OnContinueGameplay = "OnContinueGameplay";
+    #endregion
+
+    #region Menu Events
+    public static string GoToGameplay = "GoToGameplay";
+    #endregion
 }
