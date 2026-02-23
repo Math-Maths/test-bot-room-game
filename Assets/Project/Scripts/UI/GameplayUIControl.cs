@@ -13,8 +13,8 @@ namespace TestBotRoom.UI
 
         [Space(10)]
         [Header("End Screen UI Elements")]
-        [SerializeField] private GameObject endScreenPanel;
-        [SerializeField] private TMP_Text currentScoreText;
+        [SerializeField] private GameOverPanelTweenControl endScreenPanel;
+        [SerializeField] private ScoreCounter currentScoreText;
         [SerializeField] private TMP_Text bestScoreText;
         [SerializeField] private float endScreenDelay = 3f;
         [SerializeField] private Image continueButton;
@@ -118,8 +118,9 @@ namespace TestBotRoom.UI
                 buttonToContinue.enabled = true;
             }
 
-            currentScoreText.text = finalScore.ToString("000");
-            endScreenPanel.SetActive(true);
+            currentScoreText.SetScore(finalScore);
+            endScreenPanel.gameObject.SetActive(true);
+            endScreenPanel.PlayGameOverAnimation();
         }
     }
 }
