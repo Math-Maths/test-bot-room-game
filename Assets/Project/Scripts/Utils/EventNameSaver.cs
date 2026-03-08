@@ -14,5 +14,7 @@ static public class EventNameSaver
 
     #region Menu Events
     public static string GoToGameplay = "GoToGameplay";
+    public static string OnSignInWithGooglePlayGames = "OnSignInWithGooglePlayGames";
+    public static string OnSignInAnonymously = "OnSignInAnonymously";
     #endregion
 }
