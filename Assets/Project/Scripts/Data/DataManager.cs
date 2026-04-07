@@ -12,6 +12,8 @@ namespace TestBotRoom
         {
             string json = JsonUtility.ToJson(data, true);
             File.WriteAllText(SavePath, json);
+
+            Debug.LogWarning("Data saved to: " + SavePath);
         }
 
         public SaveData Load()
@@ -23,6 +25,9 @@ namespace TestBotRoom
 
             string json = File.ReadAllText(SavePath);
             SaveData data = JsonUtility.FromJson<SaveData>(json);
+
+            Debug.LogWarning("Data loaded from: " + SavePath);
+
             return data;
         }
 
@@ -40,9 +45,6 @@ namespace TestBotRoom
     {
         public string playerName;
         public int bestScore;
-        public int coins;
-        public int gears;
-        public List<string> unlockedCharacters;
         public List<string> unlockedAchivements;
     }
 }

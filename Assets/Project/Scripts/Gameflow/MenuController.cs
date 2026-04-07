@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using TestBotRoom.UI;
 using UnityEngine;
 
@@ -11,14 +12,13 @@ namespace TestBotRoom
         [SerializeField] private GameObject _characterHolder;
         [SerializeField] private LoadingScreenControl _loadingScreen;
 
-        private void OnEnable()
+        private async void OnEnable()
         {
             EventManager.Instance.AddListener(EventNameSaver.GoToGameplay, LoadGamePlay);
             BindObjects();
-            //Show loading screen
             _loadingScreen.ShowLoadScreen();
             //Get Data from GameManager
-            InitializeObjects();
+            await InitializeObjects();
             _loadingScreen.HideLoadingScreen();
         }
 
@@ -36,16 +36,23 @@ namespace TestBotRoom
             _loadingScreen = Instantiate(_loadingScreen);
         }
 
-        private void InitializeObjects()
+        private async Task InitializeObjects()
         {
-            _menuCanvas.Initialize(GetData());
+            if(GameManager.Instance.CurrentGameState == GameState.Lobby)
+            {
+                _menuCanvas.GotoLobby(GetData());
+                _mainCamera.transform.position = new Vector3(0, 2.45f, -10);
+                _mainCamera.transform.rotation = Quaternion.Euler(Vector3.right * 9);
+                return;
+            }
+            
+            _menuCanvas.Initialize();
             _mainCamera.transform.position = new Vector3(0, 2.45f, -10);
             _mainCamera.transform.rotation = Quaternion.Euler(Vector3.right * 9);
         }
 
         private void LoadGamePlay()
         {
-            //Show loading screen
             _loadingScreen.ShowLoadScreen();
             GameManager.Instance.ChangeScene("Gameplay_Scene");
         }

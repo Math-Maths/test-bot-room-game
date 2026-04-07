@@ -86,7 +86,8 @@ namespace TestBotRoom
 
         private void PrepareGameplay()
         {
-            _scoreSystem.PrepareScore(_gameplayStatus.BestScore);
+            //TODO: implement new data format
+            //_scoreSystem.PrepareScore(_gameplayStatus.BestScore);
             _playerInstance.transform.position = Vector3.zero;
             _followPlayerCamera.LookAt = _playerInstance.transform;
         }
@@ -107,7 +108,7 @@ namespace TestBotRoom
 
         private async Task ResetGamePlayAsync()
         {
-            EndRunAndReport();
+            await EndRunAndReport();
 
             _playerInstance.ResetPosition();
             _followPlayerCamera.LookAt = _playerInstance.transform;
@@ -134,7 +135,7 @@ namespace TestBotRoom
                 return;
 
             
-            //await play AD
+            //TODO: await play AD
             _playerInstance.ResetPosition();
             _followPlayerCamera.LookAt = _playerInstance.transform;
 
@@ -153,18 +154,23 @@ namespace TestBotRoom
 
         private void GoToMainMenu()
         {
+            _ = GoToMainMenuAsync();
+        }
+
+        private async Task GoToMainMenuAsync()
+        {
             _gameplayUIControl.ResetContinueButton();
             _loadingScreen.ShowLoadScreen();
-            EndRunAndReport();
+            await EndRunAndReport();
 
             GameManager.Instance.ChangeScene("Menu_Scene");
         }
 
-        private void EndRunAndReport()
+        private async Task EndRunAndReport()
         {
             int finalscore = _scoreSystem.CurrentScore;
 
-            GameManager.Instance.FinishRun(finalscore);
+            await GameManager.Instance.FinishRun(finalscore);
         }
 
         private void GetStatus()
