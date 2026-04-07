@@ -1,6 +1,14 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using System.Collections.Generic;
+using Unity.Services.Authentication;
+using System.Linq;
+using System.Threading.Tasks;
+using Unity.Services.Analytics;
+using Unity.Services.Core;
+using UnityEngine.UnityConsent;
+using System;
+
 
 namespace TestBotRoom
 {
@@ -12,6 +20,8 @@ namespace TestBotRoom
         private DataManager _dataManager;
         private EventManager _eventManager;
         private GameStatus _gameStatus;
+        private CloudDataManager _cloudDataManager;
+        private LoginManager _loginManager;
 
         public GameState CurrentGameState
         {
@@ -19,32 +29,104 @@ namespace TestBotRoom
             private set { _currentGameState = value; }
         }
 
-        private void Awake()
+        private async void Awake()
         {
             QualitySettings.vSyncCount = 0;
             Application.targetFrameRate = 60;
 
-            if(Instance == null) Instance = this;
-            else Destroy(gameObject);
+            if(Instance == null)
+            { 
+                Instance = this;
+                DontDestroyOnLoad(gameObject);
+            }
+            else
+            {
+                Destroy(gameObject);
+            }
 
-            DontDestroyOnLoad(gameObject); 
+            GetAndSetReferences();
 
+            await PlayerValidation();
+        }
+
+        private async Task PlayerValidation()
+        {
+            try 
+            {
+                await InitializeServices();
+
+                bool isAuthenticated = await CheckUserStatusAndProceed();
+
+                if (isAuthenticated)
+                {
+                    await LoadData();
+                }
+                else 
+                {
+                    return;
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.LogWarning("Offline mode activated: " + ex.Message);
+                LoadOfflineMode();
+            }
+        }
+
+        private void GetAndSetReferences()
+        {
             _dataManager = GetComponent<DataManager>();
             _eventManager = GetComponent<EventManager>();
+            _cloudDataManager = GetComponent<CloudDataManager>();
+            _loginManager = GetComponent<LoginManager>();
+            _loginManager.Initialize(this);
             _gameStatus = new GameStatus();
-
-            BindEvents();
-            LoadData();
         }
 
-        private void BindEvents()
+        private async Task InitializeServices()
         {
-            //_eventManager.AddListener(EventNameSaver.GoToGameplay, GoToGameplayScene);
+            if(UnityServices.State == ServicesInitializationState.Uninitialized)
+            {
+                await UnityServices.InitializeAsync();
+            }
+
+            EndUserConsent.SetConsentState(new ConsentState {
+                AnalyticsIntent = ConsentStatus.Granted,
+                AdsIntent = ConsentStatus.Denied
+            });
         }
 
-        private void OnDisable()
+        public async Task<bool> CheckUserStatusAndProceed()
         {
-            
+            if (AuthenticationService.Instance.SessionTokenExists)
+            {
+                try 
+                {
+                    string lastMethod = PlayerPrefs.GetString(LoginManager.LOGIN_KEY, LoginManager.METHOD_ANONYMOUS);
+
+                    if (lastMethod == LoginManager.METHOD_GOOGLE)
+                    {
+                        await _loginManager.SignInOrLinkWithGooglePlayGames();
+                    }
+                    else
+                    {
+                        await _loginManager.StartAnonymousSignIn();
+                    }
+
+                    Debug.Log("User already authenticated.");
+
+                    return true;
+                }
+                catch 
+                {
+                    Debug.LogWarning("Existing session token is invalid. Starting new authentication flow.");
+
+                    return false;
+                }
+            }
+
+            EventManager.Instance.Invoke(EventNameSaver.ShowSignInOptions);
+            return false;
         }
 
         public void StartGamePlay()
@@ -53,48 +135,89 @@ namespace TestBotRoom
             EventManager.Instance.Invoke(EventNameSaver.OnGameStarts);
         }
 
-        public void LoadData()
+        public async Task LoadData()
         {
-            SaveData data = _dataManager.Load();
-            _gameStatus = new GameStatus();
+            string cloudJson = await _cloudDataManager.GetPlayerDataFromCloud();
 
-            if(data == null)
+            if (!string.IsNullOrEmpty(cloudJson))
             {
-                _gameStatus.PlayerName = "Player";
-                _gameStatus.Coins = 0;
-                _gameStatus.Gears = 0;
-                _gameStatus.BestScore = 0;
-                _gameStatus.unlockedAchivements = new List<string>();
-                _gameStatus.unlockedCharacters = new List<string>();
-                return;
+                Debug.Log("Dados carregados da nuvem.");
+                SaveData data = JsonUtility.FromJson<SaveData>(cloudJson);
+                ApplyDataToGame(data);
+                _dataManager.Save(data);
             }
+            else
+            {
+                SaveData localData = _dataManager.Load();
 
-            _gameStatus.PlayerName = data.playerName;
-            _gameStatus.Coins = data.coins;
-            _gameStatus.Gears = data.gears;
-            _gameStatus.BestScore = data.bestScore;
-            _gameStatus.unlockedAchivements = data.unlockedAchivements;
-            _gameStatus.unlockedCharacters = data.unlockedCharacters;
+                if (localData != null)
+                {
+                    Debug.Log("Load data from local cache.");
+                    ApplyDataToGame(localData);
+                }
+                else
+                {
+                    Debug.Log("First time player.");
+                    await CreateDefaultData();
+                }
+            }
         }
 
-        public void SaveData()
+        private void LoadOfflineMode()
+        {
+            SaveData localData = _dataManager.Load();
+            if(localData != null) 
+            {
+                ApplyDataToGame(localData);
+                EventManager.Instance.Invoke(EventNameSaver.ShowLobby);
+            }
+            else 
+            {
+                _gameStatus = new GameStatus { PlayerName = "Offline Player", BestScore = 0 };
+                _dataManager.Save(new SaveData { playerName = "Offline Player" });
+            }
+        }
+
+        private void ApplyDataToGame(SaveData data)
+        {
+            _gameStatus.PlayerName = data.playerName;
+            _gameStatus.BestScore = data.bestScore;
+            _gameStatus.unlockedAchivements = data.unlockedAchivements;
+        }
+
+        private async Task CreateDefaultData()
+        {
+            _gameStatus = new GameStatus {
+                PlayerName = "New Player",
+                BestScore = 0,
+                unlockedAchivements = new List<string>()
+            };
+            await SaveData();
+        }
+
+        public async Task SaveData()
         {
             SaveData data = new SaveData
             {
                 bestScore = _gameStatus.BestScore,
-                coins = _gameStatus.Coins,
-                gears = _gameStatus.Gears,
                 playerName = _gameStatus.PlayerName,
-                unlockedAchivements = _gameStatus.unlockedAchivements,
-                unlockedCharacters = _gameStatus.unlockedCharacters
+                unlockedAchivements = _gameStatus.unlockedAchivements
             };
 
             _dataManager.Save(data);
-        }
 
-        private void AddCoins(int coins)
-        {
-            _gameStatus.Coins += coins;
+            if (UnityServices.State == ServicesInitializationState.Initialized && 
+                AuthenticationService.Instance.IsSignedIn)
+            {
+                try 
+                {
+                    await _cloudDataManager.SavePlayerDataToCloud(data);
+                } 
+                catch (Exception e) 
+                {
+                    Debug.LogWarning("It was not possible to synchronize with the cloud now: " + e.Message);
+                }
+            }
         }
 
         private void RegisterScore(int score)
@@ -103,11 +226,24 @@ namespace TestBotRoom
                 _gameStatus.BestScore = score;
         }
 
-        public void FinishRun(int coinsInThisRun)
+        public async Task SavePlayerName(string newName)
         {
-            AddCoins(coinsInThisRun);
+            if (_gameStatus == null)
+            {
+                Debug.LogWarning("GameStatus not initialized. Creating new instance.");
+                _gameStatus = new GameStatus();
+            }
+
+            _gameStatus.PlayerName = newName.Trim();
+            await SaveData();
+
+            Debug.Log($"Player name updated to: {_gameStatus.PlayerName}");
+        }
+
+        public async Task FinishRun(int coinsInThisRun)
+        {
             RegisterScore(coinsInThisRun);
-            SaveData();
+            await SaveData();
         }
 
         public void ChangeScene(string sceneName)
@@ -123,7 +259,8 @@ namespace TestBotRoom
 
     public enum GameState
     {
-        Menu,
+        StartMenu,
+        Lobby,
         Gameplay,
         Tutorial,
         GameOver
@@ -132,10 +269,7 @@ namespace TestBotRoom
     public class GameStatus
     {
         public string PlayerName { get; set; }
-        public int Coins { get; set; }
-        public int Gears { get; set; }
         public int BestScore { get; set; }
-        public List<string> unlockedCharacters;
         public List<string> unlockedAchivements;
     }
 }

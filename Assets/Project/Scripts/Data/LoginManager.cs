@@ -2,6 +2,10 @@ using System.Threading.Tasks;
 using Unity.Services.Authentication;
 using Unity.Services.Core;
 using UnityEngine;
+using Unity.VisualScripting;
+using TestBotRoom;
+
+
 
 #if UNITY_ANDROID
 using GooglePlayGames;
@@ -10,9 +14,15 @@ using GooglePlayGames.BasicApi;
 
 public class LoginManager : MonoBehaviour
 {
+    public const string METHOD_GOOGLE = "GooglePlayGames";
+    public const string METHOD_ANONYMOUS = "Anonymous";
+    public const string LOGIN_KEY = "LastLoginMethod";
+
     private string m_GooglePlayGamesToken;
 
-    private async void Awake()
+    private GameManager _gameManager;
+
+    private void Awake()
     {
 #if UNITY_ANDROID
         PlayGamesPlatform.DebugLogEnabled = true;
@@ -20,22 +30,24 @@ public class LoginManager : MonoBehaviour
         LoginGooglePlayGames();
 #endif
 
-        if(UnityServices.State == ServicesInitializationState.Uninitialized)
-        {
-            await UnityServices.InitializeAsync();
-        }
+        //Debug.Log(PlayGamesPlatform.Instance.IsAuthenticated());
+    }
+
+    public void Initialize(GameManager gameManager)
+    {
+        _gameManager = gameManager;
     }
 
     private void OnEnable()
     {
-        EventManager.Instance.AddListener(EventNameSaver.OnSignInWithGooglePlayGames, StartSignInWithGooglePlayGames);
-        EventManager.Instance.AddListener(EventNameSaver.OnSignInAnonymously, StartAnonymousSignIn);
+        EventManager.Instance.AddListener(EventNameSaver.OnSignInWithGooglePlayGames, StartSignInWithGooglePlayGames_FromEvent);
+        EventManager.Instance.AddListener(EventNameSaver.OnSignInAnonymously, StartAnonymousSignIn_FromEvent);
     }
 
     private void OnDisable()
     {
-        EventManager.Instance.RemoveListener(EventNameSaver.OnSignInWithGooglePlayGames, StartSignInWithGooglePlayGames);
-        EventManager.Instance.RemoveListener(EventNameSaver.OnSignInAnonymously, StartAnonymousSignIn);
+        EventManager.Instance.RemoveListener(EventNameSaver.OnSignInWithGooglePlayGames, StartSignInWithGooglePlayGames_FromEvent);
+        EventManager.Instance.RemoveListener(EventNameSaver.OnSignInAnonymously, StartAnonymousSignIn_FromEvent);
     }
 
 #if UNITY_ANDROID
@@ -61,19 +73,57 @@ public class LoginManager : MonoBehaviour
         });
     }
 
-    public void StartSignInWithGooglePlayGames()
+    private Task<string> GetGoogleTokenAsync()
+    {
+        var tcs = new TaskCompletionSource<string>();
+    
+        PlayGamesPlatform.Instance.RequestServerSideAccess(true, code =>
+        {
+            if (string.IsNullOrEmpty(code))
+            {
+                Debug.LogError("Google não devolveu um código válido.");
+                tcs.SetResult(null);
+            }
+            else
+            {
+                tcs.SetResult(code);
+            }
+        });
+    
+        return tcs.Task;
+    }
+
+    private async void StartSignInWithGooglePlayGames_FromEvent()
+    {
+        await StartSignInWithGooglePlayGames();
+    }
+
+    public async Task StartSignInWithGooglePlayGames()
     {
         if(!PlayGamesPlatform.Instance.IsAuthenticated())
         {
-            Debug.LogWarning("Not yet authenticated with Google Play Games. Please wait...");
+            Debug.LogWarning("Não autenticado no GPG. Chamando login...");
             LoginGooglePlayGames();
-            return;
+            return; 
         }
 
-        SignInOrLinkWithGooglePlayGames();
+        if(string.IsNullOrEmpty(m_GooglePlayGamesToken))
+        {
+            Debug.Log("Token nulo, solicitando novo token ao Google...");
+            m_GooglePlayGamesToken = await GetGoogleTokenAsync();
+        }
+
+        if (!string.IsNullOrEmpty(m_GooglePlayGamesToken))
+        {
+            await SignInOrLinkWithGooglePlayGames();
+        }
+        else
+        {
+            Debug.LogError("Falha crítica: impossível obter token do Google Play Games.");
+        }
     }
 
-    private async void SignInOrLinkWithGooglePlayGames()
+    public async Task SignInOrLinkWithGooglePlayGames()
     {
         if(string.IsNullOrEmpty(m_GooglePlayGamesToken))
         {
@@ -97,6 +147,11 @@ public class LoginManager : MonoBehaviour
         {
             await AuthenticationService.Instance.SignInWithGooglePlayGamesAsync(authCode);
             Debug.Log("Successfully signed in with Google Play Games.");
+
+            PlayerPrefs.SetString(LOGIN_KEY, METHOD_GOOGLE);
+            PlayerPrefs.Save();
+
+            await OnLoginSuccess(true);
         }
         catch (AuthenticationException ex)
         {
@@ -114,6 +169,10 @@ public class LoginManager : MonoBehaviour
         {
             await AuthenticationService.Instance.LinkWithGooglePlayGamesAsync(authCode);
             Debug.Log("Successfully linked Google Play Games account.");
+
+            PlayerPrefs.SetString(LOGIN_KEY, METHOD_GOOGLE);
+            PlayerPrefs.Save();
+
         }
         catch (AuthenticationException ex) when (ex.ErrorCode == AuthenticationErrorCodes.AccountAlreadyLinked)
         {
@@ -130,7 +189,12 @@ public class LoginManager : MonoBehaviour
     }
 #endif
 
-    public async void StartAnonymousSignIn()
+    private void StartAnonymousSignIn_FromEvent()
+    {
+        _ = StartAnonymousSignIn();
+    }
+
+    public async Task StartAnonymousSignIn()
     {
         await SignUpAnonymouslyAsync();
     }
@@ -142,22 +206,37 @@ public class LoginManager : MonoBehaviour
             await AuthenticationService.Instance.SignInAnonymouslyAsync();
             Debug.Log("Sign in anonymously succeeded!");
 
-            // Shows how to get the playerID
             Debug.Log($"PlayerID: {AuthenticationService.Instance.PlayerId}");
+            PlayerPrefs.SetString(LOGIN_KEY, METHOD_ANONYMOUS);
+            PlayerPrefs.Save();
 
+            await OnLoginSuccess();
         }
         catch (AuthenticationException ex)
         {
-            // Compare error code to AuthenticationErrorCodes
-            // Notify the player with the proper error message
             Debug.LogException(ex);
         }
         catch (RequestFailedException ex)
         {
-            // Compare error code to CommonErrorCodes
-            // Notify the player with the proper error message
             Debug.LogException(ex);
          }
+    }
+
+    /// <summary>
+    /// Orchestrates data loading and UI transition once the identity is confirmed.
+    /// </summary>
+    private async Task OnLoginSuccess(bool goToLobby = false)
+    {
+        // Load existing data or create default if first time
+        await _gameManager.LoadData();
+        
+        if(goToLobby)
+        {
+            EventManager.Instance.Invoke(EventNameSaver.ShowLobby);
+        }
+        //TODO else - mostrar o campo para preencher o nome do jogador, e só depois ir para a lobby.
+
+        Debug.Log("Login flow completed. Data loaded and Lobby triggered.");
     }
 
 
