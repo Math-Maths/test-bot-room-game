@@ -20,7 +20,7 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: 7400000, guid: a67ace448c3904c4f8508f42041ba59d, type: 2}
+  m_Motion: {fileID: 4781951162920444690, guid: 10cf2500f465e61449019a3251f8e525, type: 3}
   m_Tag: 
   m_SpeedParameter: 
   m_MirrorParameter: 
@@ -96,7 +96,7 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: 7400000, guid: b51444e032e5d40428452c9c0dbbc9c6, type: 2}
+  m_Motion: {fileID: 4781951162920444690, guid: ae37617185271064284443509099b42d, type: 3}
   m_Tag: 
   m_SpeedParameter: 
   m_MirrorParameter: 
@@ -132,7 +132,7 @@ AnimatorState:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Player Jump Start
-  m_Speed: 1
+  m_Speed: 2
   m_CycleOffset: 0
   m_Transitions: []
   m_StateMachineBehaviours:
@@ -145,7 +145,7 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: 7400000, guid: bde9a331311c83b42bc4dcf84f487e14, type: 2}
+  m_Motion: {fileID: 4781951162920444690, guid: 23922f2a0898de54db80d4371d4c1aa1, type: 3}
   m_Tag: 
   m_SpeedParameter: 
   m_MirrorParameter: 
@@ -198,7 +198,7 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: 7400000, guid: c09209c020a7d6e44a499830026eb591, type: 2}
+  m_Motion: {fileID: 4781951162920444690, guid: 2e7f9f2ff405a1e43aa07917b042441b, type: 3}
   m_Tag: 
   m_SpeedParameter: 
   m_MirrorParameter: 
@@ -224,7 +224,7 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: 7400000, guid: 66b3a647ea65c114693c578725779739, type: 2}
+  m_Motion: {fileID: 4781951162920444690, guid: c24c0ab6c09721443ba34ec676259eee, type: 3}
   m_Tag: 
   m_SpeedParameter: 
   m_MirrorParameter: 
