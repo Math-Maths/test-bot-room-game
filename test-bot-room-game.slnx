@@ -2,5 +2,7 @@
   <Project Path="Assembly-CSharp.csproj" />
   <Project Path="Google.Play.Games.Editor.csproj" />
   <Project Path="Google.Play.Games.csproj" />
+  <Project Path="Unity.Services.CloudCode.GeneratedBindings.csproj" />
   <Project Path="Assembly-CSharp-Editor.csproj" />
+  <Project Path="Sample_Economy.csproj" />
 </Solution>
