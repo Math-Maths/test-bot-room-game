@@ -103,7 +103,7 @@ namespace TestBotRoom.Gameplay
 
             if(isMoving)
             {
-                ShotAnimation("Player Walk");
+                ShotAnimation("Player Run");
             }
             else
             {
