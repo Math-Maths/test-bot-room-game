@@ -3,6 +3,7 @@ using UnityEngine;
 using System.Threading.Tasks;
 using System.Collections;
 using UnityEngine.UI;
+using System;
 
 namespace TestBotRoom.UI
 {
@@ -31,6 +32,16 @@ namespace TestBotRoom.UI
 
         private Color _continueButtonOriginalColor;
         private Color _continueTextOriginalColor;
+        private Action _resetGameAction;
+        private Action _goToMenuAction;
+        private Action _continueGameplayAction;
+
+        public void ConfigureActions(Action resetGameAction, Action goToMenuAction, Action continueGameplayAction)
+        {
+            _resetGameAction = resetGameAction;
+            _goToMenuAction = goToMenuAction;
+            _continueGameplayAction = continueGameplayAction;
+        }
 
         public void OnInitiate()
         {
@@ -80,9 +91,19 @@ namespace TestBotRoom.UI
             bestScoreText.text = value.ToString("000");
         }
 
-        public void CallEvent(string eventName)
+        public void OnResetButtonClicked()
         {
-            EventManager.Instance.Invoke(eventName);
+            _resetGameAction?.Invoke();
+        }
+
+        public void OnGoToMenuButtonClicked()
+        {
+            _goToMenuAction?.Invoke();
+        }
+
+        public void OnContinueGameplayButtonClicked()
+        {
+            _continueGameplayAction?.Invoke();
         }
 
         public void ShowEndScreen(int finalScore, bool canContinue = true)
