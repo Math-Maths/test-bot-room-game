@@ -419,14 +419,14 @@ MonoBehaviour:
         m_CallState: 2
       - m_Target: {fileID: 4546714630955246881}
         m_TargetAssemblyTypeName: TestBotRoom.UI.GameplayUIControl, Assembly-CSharp
-        m_MethodName: CallEvent
-        m_Mode: 5
+        m_MethodName: OnResetButtonClicked
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
-          m_StringArgument: OnGameReset
+          m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
 --- !u!114 &2429145447013112489
@@ -470,7 +470,7 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1042133937786719690}
   m_LocalRotation: {x: -0.00000022351739, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 7.54}
+  m_LocalPosition: {x: 0, y: 0, z: 7.58}
   m_LocalScale: {x: 0.1, y: 0.1, z: 0.1}
   m_ConstrainProportionsScale: 1
   m_Children: []
@@ -478,7 +478,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -435.875, y: -241.48}
+  m_AnchoredPosition: {x: -435.875, y: -241.17}
   m_SizeDelta: {x: 152.8619, y: 38.2155}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &4631276472412248821
@@ -511,15 +511,15 @@ MonoBehaviour:
       m_Calls: []
   m_text: 000
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 79028333ede810645b6435944c1321e8, type: 2}
-  m_sharedMaterial: {fileID: -6417989161261182809, guid: 79028333ede810645b6435944c1321e8, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 0ae845b0c7f87ef449dfe35f89f7d922, type: 2}
+  m_sharedMaterial: {fileID: -6417989161261182809, guid: 0ae845b0c7f87ef449dfe35f89f7d922, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 3594140218
-  m_fontColor: {r: 0.22700001, g: 0.22700001, b: 0.22700001, a: 0.8392157}
+    rgba: 4293722086
+  m_fontColor: {r: 0.9037736, g: 1, b: 0.9254717, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -2150,14 +2150,14 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 4546714630955246881}
         m_TargetAssemblyTypeName: TestBotRoom.UI.GameplayUIControl, Assembly-CSharp
-        m_MethodName: CallEvent
-        m_Mode: 5
+        m_MethodName: OnGoToMenuButtonClicked
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
-          m_StringArgument: GoToMenu
+          m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
 --- !u!114 &9026027227645164076
@@ -2490,14 +2490,14 @@ MonoBehaviour:
         m_CallState: 2
       - m_Target: {fileID: 4546714630955246881}
         m_TargetAssemblyTypeName: TestBotRoom.UI.GameplayUIControl, Assembly-CSharp
-        m_MethodName: CallEvent
-        m_Mode: 5
+        m_MethodName: OnContinueGameplayButtonClicked
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
-          m_StringArgument: OnContinueGameplay
+          m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
 --- !u!114 &7089896140342108419
@@ -3851,18 +3851,6 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 4546714630955246881}
-        m_TargetAssemblyTypeName: TestBotRoom.UI.GameplayUIControl, Assembly-CSharp
-        m_MethodName: CallEvent
-        m_Mode: 5
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: ProvisionalPlayGame
-          m_BoolArgument: 0
-        m_CallState: 2
       - m_Target: {fileID: 1334185732381209753}
         m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
         m_MethodName: SetActive
