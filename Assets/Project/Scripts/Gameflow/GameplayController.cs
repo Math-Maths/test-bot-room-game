@@ -29,9 +29,6 @@ namespace TestBotRoom
         private void OnEnable()
         {
             EventManager.Instance.AddListener(EventNameSaver.OnGameOver, OnGameplayEnd);
-            EventManager.Instance.AddListener(EventNameSaver.OnGameReset, ResetGamePlay);
-            EventManager.Instance.AddListener(EventNameSaver.GoToMenu, GoToMainMenu);
-            EventManager.Instance.AddListener(EventNameSaver.OnContinueGameplay, ContinueGameplay);
 
             //Provisional
             //EventManager.Instance.AddListener(EventNameSaver.ProvisionalPlay, PlayProvisional);
@@ -40,9 +37,6 @@ namespace TestBotRoom
         private void OnDisable()
         {
             EventManager.Instance.RemoveListener(EventNameSaver.OnGameOver, OnGameplayEnd);
-            EventManager.Instance.RemoveListener(EventNameSaver.OnGameReset, ResetGamePlay);
-            EventManager.Instance.RemoveListener(EventNameSaver.GoToMenu, GoToMainMenu);
-            EventManager.Instance.RemoveListener(EventNameSaver.OnContinueGameplay, ContinueGameplay);
 
             //Provisional
             //EventManager.Instance.RemoveListener(EventNameSaver.ProvisionalPlay, PlayProvisional);
@@ -73,6 +67,7 @@ namespace TestBotRoom
             _laserSpawner = Instantiate(_laserSpawner);
             _gameplayUIControl = Instantiate(_gameplayUIControl);
             _loadingScreen = Instantiate(_loadingScreen);
+            _gameplayUIControl.ConfigureActions(ResetGamePlay, GoToMainMenu, ContinueGameplay);
         }
 
         private async Awaitable InitialiazeObjects()

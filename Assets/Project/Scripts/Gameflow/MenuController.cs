@@ -14,17 +14,11 @@ namespace TestBotRoom
 
         private async void OnEnable()
         {
-            EventManager.Instance.AddListener(EventNameSaver.GoToGameplay, LoadGamePlay);
             BindObjects();
             _loadingScreen.ShowLoadScreen();
             //Get Data from GameManager
             await InitializeObjects();
             _loadingScreen.HideLoadingScreen();
-        }
-
-        private void OnDisable()
-        {
-            EventManager.Instance.RemoveListener(EventNameSaver.GoToGameplay, LoadGamePlay);
         }
 
         private void BindObjects()
@@ -34,6 +28,7 @@ namespace TestBotRoom
             _environment = Instantiate(_environment);
             _characterHolder = Instantiate(_characterHolder);
             _loadingScreen = Instantiate(_loadingScreen);
+            _menuCanvas.ConfigureActions(LoadGamePlay);
         }
 
         private async Task InitializeObjects()

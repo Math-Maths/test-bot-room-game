@@ -3,6 +3,7 @@ using UnityEngine;
 using TestBotRoom.Utils;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using System;
 
 namespace TestBotRoom.UI
 {
@@ -19,6 +20,12 @@ namespace TestBotRoom.UI
         [SerializeField] private TMP_Text playerNameText;
         
         private List<OnEventReaction> onEventReaction;
+        private Action _goToGameplayAction;
+
+        public void ConfigureActions(Action goToGameplayAction)
+        {
+            _goToGameplayAction = goToGameplayAction;
+        }
 
         public void Initialize()
         {
@@ -39,14 +46,27 @@ namespace TestBotRoom.UI
             _ = SavePlayerName();
         }
 
+        public void OnAnonymousSignInButtonClicked()
+        {
+            _ = GameManager.Instance.StartAnonymousSignInAsync();
+        }
+
+        public void OnGoogleSignInButtonClicked()
+        {
+            _ = GameManager.Instance.StartGooglePlayGamesSignInAsync();
+        }
+
+        public void OnPlayButtonClicked()
+        {
+            _goToGameplayAction?.Invoke();
+        }
+
         private async Task SavePlayerName()
         {
             if(IsPlayerNameValid(playerInputField.text))
             {
-                playerNameText.text = playerInputField.text;
                 await GameManager.Instance.SavePlayerName(playerInputField.text);
-                startScreen.SetActive(false);
-                lobbyScreen.SetActive(true);
+                GotoLobby(GameManager.Instance.GetPlayerData());
             }
             else
             {
@@ -61,11 +81,6 @@ namespace TestBotRoom.UI
             playerNameText.text = playerData.PlayerName;
             startScreen.SetActive(false);
             lobbyScreen.SetActive(true);
-        }
-
-        public void CallEvent(string eventName)
-        {
-            EventManager.Instance.Invoke(eventName);
         }
 
         private bool IsPlayerNameValid(string name)
