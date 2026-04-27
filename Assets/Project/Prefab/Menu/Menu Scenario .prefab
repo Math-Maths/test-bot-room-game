@@ -534,6 +534,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 7041796269469099904}
     m_Modifications:
+    - target: {fileID: -9149813434743145265, guid: 64ba462b5500e994884256edfb27404d, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8967707633547820264, guid: 64ba462b5500e994884256edfb27404d, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 64ba462b5500e994884256edfb27404d, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -578,9 +586,45 @@ PrefabInstance:
       propertyPath: m_StaticShadowCaster
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -6327905705268297732, guid: 64ba462b5500e994884256edfb27404d, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -5341245955850956032, guid: 64ba462b5500e994884256edfb27404d, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -2642220736240449025, guid: 64ba462b5500e994884256edfb27404d, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -1201051820894617925, guid: 64ba462b5500e994884256edfb27404d, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 64ba462b5500e994884256edfb27404d, type: 3}
       propertyPath: m_Name
       value: scenegame_v05
+      objectReference: {fileID: 0}
+    - target: {fileID: 5236319757960039578, guid: 64ba462b5500e994884256edfb27404d, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6319134846678778671, guid: 64ba462b5500e994884256edfb27404d, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7079442580482958181, guid: 64ba462b5500e994884256edfb27404d, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7332667875169707817, guid: 64ba462b5500e994884256edfb27404d, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8320676483114362959, guid: 64ba462b5500e994884256edfb27404d, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

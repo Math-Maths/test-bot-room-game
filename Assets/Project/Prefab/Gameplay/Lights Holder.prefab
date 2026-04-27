@@ -27,7 +27,7 @@ Transform:
   m_GameObject: {fileID: 1512365242655935540}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -14.09, y: 9.699999, z: 5.18}
+  m_LocalPosition: {x: -14.09, y: 12.899999, z: 2.5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -44,8 +44,8 @@ Light:
   serializedVersion: 12
   m_Type: 2
   m_Color: {r: 1, g: 0.0054945056, b: 0, a: 1}
-  m_Intensity: 68.6
-  m_Range: 26.7062
+  m_Intensity: 200
+  m_Range: 40.4
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208
   m_CookieSize2D: {x: 10, y: 10}
@@ -188,7 +188,7 @@ Transform:
   m_GameObject: {fileID: 7837339167525980758}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 13.33, y: 9.7, z: 5.18}
+  m_LocalPosition: {x: 13.33, y: 12.9, z: 2.5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -205,8 +205,8 @@ Light:
   serializedVersion: 12
   m_Type: 2
   m_Color: {r: 1, g: 0.0054945056, b: 0, a: 1}
-  m_Intensity: 100
-  m_Range: 26.7062
+  m_Intensity: 200
+  m_Range: 40.4
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208
   m_CookieSize2D: {x: 10, y: 10}
@@ -310,7 +310,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5908896855083434498, guid: f1ddabd7eca23764a8cfd8797d0558fc, type: 3}
       propertyPath: m_Intensity
-      value: 60
+      value: 80
       objectReference: {fileID: 0}
     - target: {fileID: 5908896855083434498, guid: f1ddabd7eca23764a8cfd8797d0558fc, type: 3}
       propertyPath: m_SpotAngle
@@ -322,7 +322,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5908896855083434498, guid: f1ddabd7eca23764a8cfd8797d0558fc, type: 3}
       propertyPath: m_InnerSpotAngle
-      value: 125.329926
+      value: 133.48813
       objectReference: {fileID: 0}
     - target: {fileID: 5908896855083434498, guid: f1ddabd7eca23764a8cfd8797d0558fc, type: 3}
       propertyPath: m_Shadows.m_Type
@@ -346,11 +346,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8336668882215580194, guid: f1ddabd7eca23764a8cfd8797d0558fc, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 10
+      value: 11.56
       objectReference: {fileID: 0}
     - target: {fileID: 8336668882215580194, guid: f1ddabd7eca23764a8cfd8797d0558fc, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -0
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8336668882215580194, guid: f1ddabd7eca23764a8cfd8797d0558fc, type: 3}
       propertyPath: m_LocalRotation.w
