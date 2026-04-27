@@ -1,0 +1,13 @@
+C:\Users\mathe\AppData\Local\Temp\TestRoomCloud\module-compilation\TestRoomCloud.dll
+C:\Users\mathe\AppData\Local\Temp\TestRoomCloud\module-compilation\TestRoomCloud.deps.json
+C:\Users\mathe\AppData\Local\Temp\TestRoomCloud\module-compilation\TestRoomCloud.pdb
+C:\Users\mathe\AppData\Local\Temp\TestRoomCloud\module-compilation\Unity.Services.CloudCode.Apis.dll
+C:\Users\mathe\AppData\Local\Temp\TestRoomCloud\module-compilation\Unity.Services.CloudCode.Core.dll
+C:\Users\mathe\AppData\Local\Temp\TestRoomCloud\module-compilation\Google.Protobuf.dll
+C:\Users\mathe\AppData\Local\Temp\TestRoomCloud\module-compilation\Grpc.Core.Api.dll
+C:\Users\mathe\AppData\Local\Temp\TestRoomCloud\module-compilation\Grpc.Net.Client.dll
+C:\Users\mathe\AppData\Local\Temp\TestRoomCloud\module-compilation\Grpc.Net.Common.dll
+C:\Users\mathe\AppData\Local\Temp\TestRoomCloud\module-compilation\JsonSubTypes.dll
+C:\Users\mathe\AppData\Local\Temp\TestRoomCloud\module-compilation\Microsoft.Extensions.DependencyInjection.Abstractions.dll
+C:\Users\mathe\AppData\Local\Temp\TestRoomCloud\module-compilation\Microsoft.Extensions.Logging.Abstractions.dll
+C:\Users\mathe\AppData\Local\Temp\TestRoomCloud\module-compilation\Newtonsoft.Json.dll
