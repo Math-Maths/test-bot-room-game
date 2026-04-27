@@ -2,26 +2,28 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using System.Collections.Generic;
 using Unity.Services.Authentication;
-using System.Linq;
 using System.Threading.Tasks;
 using Unity.Services.Analytics;
 using Unity.Services.Core;
 using UnityEngine.UnityConsent;
 using System;
 
-
 namespace TestBotRoom
 {
     public class GameManager : MonoBehaviour
     {
-        public static GameManager Instance {get; private set;}
+        private const string DefaultPlayerName = "New Player";
 
+        public static GameManager Instance { get; private set; }
+
+        private AppFlowState _currentAppFlowState;
         private GameState _currentGameState;
         private DataManager _dataManager;
-        private EventManager _eventManager;
         private GameStatus _gameStatus;
         private CloudDataManager _cloudDataManager;
         private LoginManager _loginManager;
+
+        public AppFlowState CurrentAppFlowState => _currentAppFlowState;
 
         public GameState CurrentGameState
         {
@@ -34,37 +36,32 @@ namespace TestBotRoom
             QualitySettings.vSyncCount = 0;
             Application.targetFrameRate = 60;
 
-            if(Instance == null)
-            { 
+            if (Instance == null)
+            {
                 Instance = this;
                 DontDestroyOnLoad(gameObject);
             }
             else
             {
                 Destroy(gameObject);
+                return;
             }
 
             GetAndSetReferences();
 
-            await PlayerValidation();
+            await BootstrapAsync();
         }
 
-        private async Task PlayerValidation()
+        private async Task BootstrapAsync()
         {
-            try 
+            TransitionToAppFlow(AppFlowState.Booting);
+
+            try
             {
                 await InitializeServices();
 
-                bool isAuthenticated = await CheckUserStatusAndProceed();
-
-                if (isAuthenticated)
-                {
-                    await LoadData();
-                }
-                else 
-                {
-                    return;
-                }
+                AuthResult authResult = await CheckUserStatusAndProceed();
+                await HandleAuthenticationResult(authResult);
             }
             catch (Exception ex)
             {
@@ -76,7 +73,6 @@ namespace TestBotRoom
         private void GetAndSetReferences()
         {
             _dataManager = GetComponent<DataManager>();
-            _eventManager = GetComponent<EventManager>();
             _cloudDataManager = GetComponent<CloudDataManager>();
             _loginManager = GetComponent<LoginManager>();
             _loginManager.Initialize(this);
@@ -85,52 +81,63 @@ namespace TestBotRoom
 
         private async Task InitializeServices()
         {
-            if(UnityServices.State == ServicesInitializationState.Uninitialized)
+            if (UnityServices.State == ServicesInitializationState.Uninitialized)
             {
                 await UnityServices.InitializeAsync();
             }
 
-            EndUserConsent.SetConsentState(new ConsentState {
+            EndUserConsent.SetConsentState(new ConsentState
+            {
                 AnalyticsIntent = ConsentStatus.Granted,
                 AdsIntent = ConsentStatus.Denied
             });
         }
 
-        public async Task<bool> CheckUserStatusAndProceed()
+        public async Task<AuthResult> CheckUserStatusAndProceed()
         {
             if (AuthenticationService.Instance.SessionTokenExists)
             {
-                try 
+                try
                 {
-                    string lastMethod = PlayerPrefs.GetString(LoginManager.LOGIN_KEY, LoginManager.METHOD_ANONYMOUS);
+                    AuthResult authResult = await _loginManager.SignInWithSavedMethodAsync();
 
-                    if (lastMethod == LoginManager.METHOD_GOOGLE)
+                    if (authResult.Success)
                     {
-                        await _loginManager.SignInOrLinkWithGooglePlayGames();
-                    }
-                    else
-                    {
-                        await _loginManager.StartAnonymousSignIn();
+                        Debug.Log("User already authenticated.");
                     }
 
-                    Debug.Log("User already authenticated.");
-
-                    return true;
+                    return authResult;
                 }
-                catch 
+                catch (Exception ex)
                 {
-                    Debug.LogWarning("Existing session token is invalid. Starting new authentication flow.");
-
-                    return false;
+                    Debug.LogWarning("Existing session token is invalid. Starting new authentication flow. " + ex.Message);
                 }
             }
 
-            EventManager.Instance.Invoke(EventNameSaver.ShowSignInOptions);
-            return false;
+            EnterLoginSelection();
+            return AuthResult.NoStoredSession();
+        }
+
+        public async Task HandleAuthenticationResult(AuthResult authResult)
+        {
+            if (!authResult.Success)
+            {
+                if (authResult.ShouldShowLoginOptions)
+                {
+                    EnterLoginSelection();
+                }
+
+                return;
+            }
+
+            TransitionToAppFlow(AppFlowState.LoadingProfile);
+            await LoadData();
+            RouteAuthenticatedPlayer();
         }
 
         public void StartGamePlay()
         {
+            TransitionToAppFlow(AppFlowState.Gameplay);
             _currentGameState = GameState.Gameplay;
             EventManager.Instance.Invoke(EventNameSaver.OnGameStarts);
         }
@@ -165,16 +172,24 @@ namespace TestBotRoom
 
         private void LoadOfflineMode()
         {
+            TransitionToAppFlow(AppFlowState.Offline);
+
             SaveData localData = _dataManager.Load();
-            if(localData != null) 
+            if (localData != null)
             {
                 ApplyDataToGame(localData);
-                EventManager.Instance.Invoke(EventNameSaver.ShowLobby);
+                EnterLobby();
             }
-            else 
+            else
             {
-                _gameStatus = new GameStatus { PlayerName = "Offline Player", BestScore = 0 };
+                _gameStatus = new GameStatus
+                {
+                    PlayerName = "Offline Player",
+                    BestScore = 0,
+                    unlockedAchivements = new List<string>()
+                };
                 _dataManager.Save(new SaveData { playerName = "Offline Player" });
+                EnterProfileSetup();
             }
         }
 
@@ -182,16 +197,18 @@ namespace TestBotRoom
         {
             _gameStatus.PlayerName = data.playerName;
             _gameStatus.BestScore = data.bestScore;
-            _gameStatus.unlockedAchivements = data.unlockedAchivements;
+            _gameStatus.unlockedAchivements = data.unlockedAchivements ?? new List<string>();
         }
 
         private async Task CreateDefaultData()
         {
-            _gameStatus = new GameStatus {
-                PlayerName = "New Player",
+            _gameStatus = new GameStatus
+            {
+                PlayerName = DefaultPlayerName,
                 BestScore = 0,
                 unlockedAchivements = new List<string>()
             };
+
             await SaveData();
         }
 
@@ -206,14 +223,14 @@ namespace TestBotRoom
 
             _dataManager.Save(data);
 
-            if (UnityServices.State == ServicesInitializationState.Initialized && 
+            if (UnityServices.State == ServicesInitializationState.Initialized &&
                 AuthenticationService.Instance.IsSignedIn)
             {
-                try 
+                try
                 {
                     await _cloudDataManager.SavePlayerDataToCloud(data);
-                } 
-                catch (Exception e) 
+                }
+                catch (Exception e)
                 {
                     Debug.LogWarning("It was not possible to synchronize with the cloud now: " + e.Message);
                 }
@@ -222,8 +239,10 @@ namespace TestBotRoom
 
         private void RegisterScore(int score)
         {
-            if(score > _gameStatus.BestScore)
+            if (score > _gameStatus.BestScore)
+            {
                 _gameStatus.BestScore = score;
+            }
         }
 
         public async Task SavePlayerName(string newName)
@@ -236,6 +255,7 @@ namespace TestBotRoom
 
             _gameStatus.PlayerName = newName.Trim();
             await SaveData();
+            EnterLobby();
 
             Debug.Log($"Player name updated to: {_gameStatus.PlayerName}");
         }
@@ -244,6 +264,18 @@ namespace TestBotRoom
         {
             RegisterScore(coinsInThisRun);
             await SaveData();
+        }
+
+        public async Task StartAnonymousSignInAsync()
+        {
+            AuthResult authResult = await _loginManager.StartAnonymousSignIn();
+            await HandleAuthenticationResult(authResult);
+        }
+
+        public async Task StartGooglePlayGamesSignInAsync()
+        {
+            AuthResult authResult = await _loginManager.StartSignInWithGooglePlayGames();
+            await HandleAuthenticationResult(authResult);
         }
 
         public void ChangeScene(string sceneName)
@@ -255,6 +287,71 @@ namespace TestBotRoom
         {
             return _gameStatus;
         }
+
+        private void RouteAuthenticatedPlayer()
+        {
+            EventManager.Instance.Invoke(EventNameSaver.HideSignInOptions);
+
+            if (HasCompletedPlayerProfile())
+            {
+                EnterLobby();
+                return;
+            }
+
+            EnterProfileSetup();
+        }
+
+        private bool HasCompletedPlayerProfile()
+        {
+            if (_gameStatus == null)
+            {
+                return false;
+            }
+
+            string playerName = _gameStatus.PlayerName?.Trim();
+
+            return !string.IsNullOrWhiteSpace(playerName) &&
+                   !string.Equals(playerName, DefaultPlayerName, StringComparison.Ordinal) &&
+                   playerName.Length is >= 4 and <= 16;
+        }
+
+        private void EnterLoginSelection()
+        {
+            TransitionToAppFlow(AppFlowState.NeedsLoginChoice);
+            _currentGameState = GameState.StartMenu;
+            EventManager.Instance.Invoke(EventNameSaver.ShowSignInOptions);
+        }
+
+        private void EnterProfileSetup()
+        {
+            TransitionToAppFlow(AppFlowState.NeedsProfileSetup);
+            _currentGameState = GameState.StartMenu;
+            EventManager.Instance.Invoke(EventNameSaver.HideSignInOptions);
+        }
+
+        private void EnterLobby()
+        {
+            TransitionToAppFlow(AppFlowState.Lobby);
+            _currentGameState = GameState.Lobby;
+            EventManager.Instance.Invoke(EventNameSaver.HideSignInOptions);
+            EventManager.Instance.Invoke(EventNameSaver.ShowLobby);
+        }
+
+        private void TransitionToAppFlow(AppFlowState nextState)
+        {
+            _currentAppFlowState = nextState;
+        }
+    }
+
+    public enum AppFlowState
+    {
+        Booting,
+        NeedsLoginChoice,
+        LoadingProfile,
+        NeedsProfileSetup,
+        Lobby,
+        Gameplay,
+        Offline
     }
 
     public enum GameState
@@ -271,5 +368,36 @@ namespace TestBotRoom
         public string PlayerName { get; set; }
         public int BestScore { get; set; }
         public List<string> unlockedAchivements;
+    }
+
+    public readonly struct AuthResult
+    {
+        public AuthResult(bool success, string provider, string errorMessage = null, bool shouldShowLoginOptions = true)
+        {
+            Success = success;
+            Provider = provider;
+            ErrorMessage = errorMessage;
+            ShouldShowLoginOptions = shouldShowLoginOptions;
+        }
+
+        public bool Success { get; }
+        public string Provider { get; }
+        public string ErrorMessage { get; }
+        public bool ShouldShowLoginOptions { get; }
+
+        public static AuthResult Succeeded(string provider)
+        {
+            return new AuthResult(true, provider, shouldShowLoginOptions: false);
+        }
+
+        public static AuthResult Failed(string provider, string errorMessage, bool shouldShowLoginOptions = true)
+        {
+            return new AuthResult(false, provider, errorMessage, shouldShowLoginOptions);
+        }
+
+        public static AuthResult NoStoredSession()
+        {
+            return new AuthResult(false, null, shouldShowLoginOptions: false);
+        }
     }
 }

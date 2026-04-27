@@ -1,11 +1,8 @@
 using System.Threading.Tasks;
 using Unity.Services.Authentication;
-using Unity.Services.Core;
 using UnityEngine;
-using Unity.VisualScripting;
 using TestBotRoom;
-
-
+using Unity.Services.Core;
 
 #if UNITY_ANDROID
 using GooglePlayGames;
@@ -19,7 +16,6 @@ public class LoginManager : MonoBehaviour
     public const string LOGIN_KEY = "LastLoginMethod";
 
     private string m_GooglePlayGamesToken;
-
     private GameManager _gameManager;
 
     private void Awake()
@@ -27,10 +23,7 @@ public class LoginManager : MonoBehaviour
 #if UNITY_ANDROID
         PlayGamesPlatform.DebugLogEnabled = true;
         PlayGamesPlatform.Activate();
-        LoginGooglePlayGames();
 #endif
-
-        //Debug.Log(PlayGamesPlatform.Instance.IsAuthenticated());
     }
 
     public void Initialize(GameManager gameManager)
@@ -51,37 +44,36 @@ public class LoginManager : MonoBehaviour
     }
 
 #if UNITY_ANDROID
-    private void LoginGooglePlayGames()
+    private Task<SignInStatus> AuthenticateGooglePlayGamesAsync()
     {
-        PlayGamesPlatform.Instance.Authenticate((status) =>
+        var tcs = new TaskCompletionSource<SignInStatus>();
+
+        PlayGamesPlatform.Instance.Authenticate(status =>
         {
-            if(status == SignInStatus.Success)
+            if (status == SignInStatus.Success)
             {
                 Debug.Log("Google Play Games authentication successful.");
-
-                PlayGamesPlatform.Instance.RequestServerSideAccess(true, code =>
-                {
-                    Debug.Log("Authorization code: " + code);
-                    m_GooglePlayGamesToken = code;
-                });
             }
             else
             {
                 Debug.LogError("Google Play Games authentication failed: " + status);
             }
-            
+
+            tcs.TrySetResult(status);
         });
+
+        return tcs.Task;
     }
 
     private Task<string> GetGoogleTokenAsync()
     {
         var tcs = new TaskCompletionSource<string>();
-    
+
         PlayGamesPlatform.Instance.RequestServerSideAccess(true, code =>
         {
             if (string.IsNullOrEmpty(code))
             {
-                Debug.LogError("Google não devolveu um código válido.");
+                Debug.LogError("Google did not return a valid authorization code.");
                 tcs.SetResult(null);
             }
             else
@@ -89,59 +81,96 @@ public class LoginManager : MonoBehaviour
                 tcs.SetResult(code);
             }
         });
-    
+
         return tcs.Task;
     }
 
-    private async void StartSignInWithGooglePlayGames_FromEvent()
+    private async Task<bool> EnsureGooglePlayGamesTokenAsync()
     {
-        await StartSignInWithGooglePlayGames();
-    }
-
-    public async Task StartSignInWithGooglePlayGames()
-    {
-        if(!PlayGamesPlatform.Instance.IsAuthenticated())
+        if (!PlayGamesPlatform.Instance.IsAuthenticated())
         {
-            Debug.LogWarning("Não autenticado no GPG. Chamando login...");
-            LoginGooglePlayGames();
-            return; 
+            Debug.LogWarning("Not authenticated in Google Play Games. Starting login...");
+            SignInStatus signInStatus = await AuthenticateGooglePlayGamesAsync();
+            if (signInStatus != SignInStatus.Success)
+            {
+                return false;
+            }
         }
 
-        if(string.IsNullOrEmpty(m_GooglePlayGamesToken))
+        if (string.IsNullOrEmpty(m_GooglePlayGamesToken))
         {
-            Debug.Log("Token nulo, solicitando novo token ao Google...");
+            Debug.Log("Google token is empty. Requesting a new token...");
             m_GooglePlayGamesToken = await GetGoogleTokenAsync();
         }
 
-        if (!string.IsNullOrEmpty(m_GooglePlayGamesToken))
+        if (string.IsNullOrEmpty(m_GooglePlayGamesToken))
         {
-            await SignInOrLinkWithGooglePlayGames();
+            Debug.LogError("Critical failure: unable to get Google Play Games token.");
+            return false;
         }
-        else
-        {
-            Debug.LogError("Falha crítica: impossível obter token do Google Play Games.");
-        }
-    }
 
-    public async Task SignInOrLinkWithGooglePlayGames()
+        return true;
+    }
+#endif
+
+    private void StartSignInWithGooglePlayGames_FromEvent()
     {
-        if(string.IsNullOrEmpty(m_GooglePlayGamesToken))
-        {
-            Debug.LogError("Google Play Games token is not available. Please authenticate first.");
-            return;
-        }
-
-        if(!AuthenticationService.Instance.IsSignedIn)
-        {
-            await SignInWithGooglePlayGamesAsync(m_GooglePlayGamesToken);
-        }
-        else
-        {
-            await LinkWithGooglePlayGamesAsync(m_GooglePlayGamesToken);
-        }
+        _ = StartSignInWithGooglePlayGames_FromEventAsync();
     }
 
-    private async Task SignInWithGooglePlayGamesAsync(string authCode)
+    private async Task StartSignInWithGooglePlayGames_FromEventAsync()
+    {
+        AuthResult authResult = await StartSignInWithGooglePlayGames();
+        await _gameManager.HandleAuthenticationResult(authResult);
+    }
+
+    public async Task<AuthResult> StartSignInWithGooglePlayGames()
+    {
+#if UNITY_ANDROID
+        if (!await EnsureGooglePlayGamesTokenAsync())
+        {
+            return AuthResult.Failed(METHOD_GOOGLE, "Unable to authenticate with Google Play Games.");
+        }
+
+        return await SignInOrLinkWithGooglePlayGames();
+#else
+        return AuthResult.Failed(METHOD_GOOGLE, "Google Play Games is available only on Android.");
+#endif
+    }
+
+    public async Task<AuthResult> SignInOrLinkWithGooglePlayGames()
+    {
+#if UNITY_ANDROID
+        if (!await EnsureGooglePlayGamesTokenAsync())
+        {
+            return AuthResult.Failed(METHOD_GOOGLE, "Google Play Games token is not available.");
+        }
+
+        if (!AuthenticationService.Instance.IsSignedIn)
+        {
+            return await SignInWithGooglePlayGamesAsync(m_GooglePlayGamesToken);
+        }
+
+        return await LinkWithGooglePlayGamesAsync(m_GooglePlayGamesToken);
+#else
+        return AuthResult.Failed(METHOD_GOOGLE, "Google Play Games is available only on Android.");
+#endif
+    }
+
+    public async Task<AuthResult> SignInWithSavedMethodAsync()
+    {
+        string lastMethod = PlayerPrefs.GetString(LOGIN_KEY, METHOD_ANONYMOUS);
+
+        if (lastMethod == METHOD_GOOGLE)
+        {
+            return await SignInOrLinkWithGooglePlayGames();
+        }
+
+        return await StartAnonymousSignIn();
+    }
+
+#if UNITY_ANDROID
+    private async Task<AuthResult> SignInWithGooglePlayGamesAsync(string authCode)
     {
         try
         {
@@ -151,19 +180,21 @@ public class LoginManager : MonoBehaviour
             PlayerPrefs.SetString(LOGIN_KEY, METHOD_GOOGLE);
             PlayerPrefs.Save();
 
-            await OnLoginSuccess(true);
+            return AuthResult.Succeeded(METHOD_GOOGLE);
         }
         catch (AuthenticationException ex)
         {
             Debug.LogError("Failed to sign in with Google Play Games: " + ex.Message);
+            return AuthResult.Failed(METHOD_GOOGLE, ex.Message);
         }
         catch (RequestFailedException ex)
         {
             Debug.LogError("Request failed during Google Play Games sign-in: " + ex.Message);
+            return AuthResult.Failed(METHOD_GOOGLE, ex.Message);
         }
     }
 
-    private async Task LinkWithGooglePlayGamesAsync(string authCode)
+    private async Task<AuthResult> LinkWithGooglePlayGamesAsync(string authCode)
     {
         try
         {
@@ -173,33 +204,43 @@ public class LoginManager : MonoBehaviour
             PlayerPrefs.SetString(LOGIN_KEY, METHOD_GOOGLE);
             PlayerPrefs.Save();
 
+            return AuthResult.Succeeded(METHOD_GOOGLE);
         }
         catch (AuthenticationException ex) when (ex.ErrorCode == AuthenticationErrorCodes.AccountAlreadyLinked)
         {
-            Debug.LogWarning("This user is already linked to another account. Attempting to sign in instead.");
+            Debug.LogWarning("This user is already linked to another account.");
+            return AuthResult.Failed(METHOD_GOOGLE, ex.Message);
         }
         catch (AuthenticationException ex)
         {
             Debug.LogError("Failed to link Google Play Games account: " + ex.Message);
+            return AuthResult.Failed(METHOD_GOOGLE, ex.Message);
         }
         catch (RequestFailedException ex)
         {
             Debug.LogError("Request failed during Google Play Games linking: " + ex.Message);
+            return AuthResult.Failed(METHOD_GOOGLE, ex.Message);
         }
     }
 #endif
 
     private void StartAnonymousSignIn_FromEvent()
     {
-        _ = StartAnonymousSignIn();
+        _ = StartAnonymousSignIn_FromEventAsync();
     }
 
-    public async Task StartAnonymousSignIn()
+    private async Task StartAnonymousSignIn_FromEventAsync()
     {
-        await SignUpAnonymouslyAsync();
+        AuthResult authResult = await StartAnonymousSignIn();
+        await _gameManager.HandleAuthenticationResult(authResult);
     }
 
-    private async Task SignUpAnonymouslyAsync()
+    public async Task<AuthResult> StartAnonymousSignIn()
+    {
+        return await SignUpAnonymouslyAsync();
+    }
+
+    private async Task<AuthResult> SignUpAnonymouslyAsync()
     {
         try
         {
@@ -210,34 +251,17 @@ public class LoginManager : MonoBehaviour
             PlayerPrefs.SetString(LOGIN_KEY, METHOD_ANONYMOUS);
             PlayerPrefs.Save();
 
-            await OnLoginSuccess();
+            return AuthResult.Succeeded(METHOD_ANONYMOUS);
         }
         catch (AuthenticationException ex)
         {
             Debug.LogException(ex);
+            return AuthResult.Failed(METHOD_ANONYMOUS, ex.Message);
         }
         catch (RequestFailedException ex)
         {
             Debug.LogException(ex);
-         }
-    }
-
-    /// <summary>
-    /// Orchestrates data loading and UI transition once the identity is confirmed.
-    /// </summary>
-    private async Task OnLoginSuccess(bool goToLobby = false)
-    {
-        // Load existing data or create default if first time
-        await _gameManager.LoadData();
-        
-        if(goToLobby)
-        {
-            EventManager.Instance.Invoke(EventNameSaver.ShowLobby);
+            return AuthResult.Failed(METHOD_ANONYMOUS, ex.Message);
         }
-        //TODO else - mostrar o campo para preencher o nome do jogador, e só depois ir para a lobby.
-
-        Debug.Log("Login flow completed. Data loaded and Lobby triggered.");
     }
-
-
 }
