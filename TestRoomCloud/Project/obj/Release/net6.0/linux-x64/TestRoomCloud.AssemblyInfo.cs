@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("TestRoomCloud")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Release")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+dd84a30f857a643018b1818a52b9a1c119d5f18b")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+22914aa53bda4a24db0a9ffa1f58630da18316d2")]
 [assembly: System.Reflection.AssemblyProductAttribute("TestRoomCloud")]
 [assembly: System.Reflection.AssemblyTitleAttribute("TestRoomCloud")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
