@@ -41,7 +41,7 @@ namespace TestBotRoom.Gameplay
         {
             EventManager.Instance.RemoveListener(EventNameSaver.OnCoinColleted, AdjustDifficulty);
             EventManager.Instance.RemoveListener(EventNameSaver.OnGameOver, StopAllCoroutines);
-            EventManager.Instance.AddListener(EventNameSaver.OnGameOver, DisableAllLasers);
+            EventManager.Instance.RemoveListener(EventNameSaver.OnGameOver, DisableAllLasers);
         }
 
         public void StartLasers(bool reset = false)
