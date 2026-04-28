@@ -13,17 +13,20 @@ namespace TestBotRoom
     public class GameManager : MonoBehaviour
     {
         private const string DefaultPlayerName = "New Player";
+        private const int CurrentSaveVersion = 2;
 
         public static GameManager Instance { get; private set; }
 
         private AppFlowState _currentAppFlowState;
         private GameState _currentGameState;
+        private bool _hasCompletedStartupGate;
         private DataManager _dataManager;
         private GameStatus _gameStatus;
         private CloudDataManager _cloudDataManager;
         private LoginManager _loginManager;
 
         public AppFlowState CurrentAppFlowState => _currentAppFlowState;
+        public bool HasCompletedStartupGate => _hasCompletedStartupGate;
 
         public GameState CurrentGameState
         {
@@ -122,14 +125,18 @@ namespace TestBotRoom
         {
             if (!authResult.Success)
             {
+                Debug.LogWarning($"Authentication did not complete successfully. Provider: {authResult.Provider ?? "None"}, Error: {authResult.ErrorMessage ?? "N/A"}");
+
                 if (authResult.ShouldShowLoginOptions)
                 {
+                    Debug.Log("No valid authenticated session is available. Showing sign-in options.");
                     EnterLoginSelection();
                 }
 
                 return;
             }
 
+            Debug.Log($"Authentication succeeded using provider '{authResult.Provider}'. Loading player profile.");
             TransitionToAppFlow(AppFlowState.LoadingProfile);
             await LoadData();
             RouteAuthenticatedPlayer();
@@ -149,35 +156,42 @@ namespace TestBotRoom
             if (!string.IsNullOrEmpty(cloudJson))
             {
                 Debug.Log("Dados carregados da nuvem.");
-                SaveData data = JsonUtility.FromJson<SaveData>(cloudJson);
+                SaveData data = NormalizeSaveData(JsonUtility.FromJson<SaveData>(cloudJson));
                 ApplyDataToGame(data);
                 _dataManager.Save(data);
+                Debug.Log($"Cloud profile loaded. PlayerName: '{_gameStatus.PlayerName}', Coins: {_gameStatus.Coins}, BestScore: {_gameStatus.BestScore}.");
             }
             else
             {
-                SaveData localData = _dataManager.Load();
+                SaveData localData = NormalizeSaveData(_dataManager.Load());
 
                 if (localData != null)
                 {
                     Debug.Log("Load data from local cache.");
                     ApplyDataToGame(localData);
+                    Debug.Log($"Local profile loaded. PlayerName: '{_gameStatus.PlayerName}', Coins: {_gameStatus.Coins}, BestScore: {_gameStatus.BestScore}.");
                 }
                 else
                 {
                     Debug.Log("First time player.");
                     await CreateDefaultData();
+                    Debug.Log($"Default profile created. PlayerName: '{_gameStatus.PlayerName}', Coins: {_gameStatus.Coins}, BestScore: {_gameStatus.BestScore}.");
                 }
             }
+
+            await RefreshEconomyCoinsAsync();
         }
 
         private void LoadOfflineMode()
         {
             TransitionToAppFlow(AppFlowState.Offline);
+            Debug.Log("Entering offline mode.");
 
             SaveData localData = _dataManager.Load();
             if (localData != null)
             {
-                ApplyDataToGame(localData);
+                ApplyDataToGame(NormalizeSaveData(localData));
+                Debug.Log($"Offline local profile found. PlayerName: '{_gameStatus.PlayerName}', Coins: {_gameStatus.Coins}. Going to lobby.");
                 EnterLobby();
             }
             else
@@ -185,10 +199,12 @@ namespace TestBotRoom
                 _gameStatus = new GameStatus
                 {
                     PlayerName = "Offline Player",
+                    Coins = 0,
                     BestScore = 0,
                     unlockedAchivements = new List<string>()
                 };
-                _dataManager.Save(new SaveData { playerName = "Offline Player" });
+                _dataManager.Save(BuildSaveData());
+                Debug.Log("No offline local profile found. Going to profile setup.");
                 EnterProfileSetup();
             }
         }
@@ -196,6 +212,7 @@ namespace TestBotRoom
         private void ApplyDataToGame(SaveData data)
         {
             _gameStatus.PlayerName = data.playerName;
+            _gameStatus.Coins = data.coins;
             _gameStatus.BestScore = data.bestScore;
             _gameStatus.unlockedAchivements = data.unlockedAchivements ?? new List<string>();
         }
@@ -205,6 +222,7 @@ namespace TestBotRoom
             _gameStatus = new GameStatus
             {
                 PlayerName = DefaultPlayerName,
+                Coins = 0,
                 BestScore = 0,
                 unlockedAchivements = new List<string>()
             };
@@ -214,12 +232,7 @@ namespace TestBotRoom
 
         public async Task SaveData()
         {
-            SaveData data = new SaveData
-            {
-                bestScore = _gameStatus.BestScore,
-                playerName = _gameStatus.PlayerName,
-                unlockedAchivements = _gameStatus.unlockedAchivements
-            };
+            SaveData data = BuildSaveData();
 
             _dataManager.Save(data);
 
@@ -243,6 +256,62 @@ namespace TestBotRoom
             {
                 _gameStatus.BestScore = score;
             }
+        }
+
+        private SaveData BuildSaveData()
+        {
+            return new SaveData
+            {
+                saveVersion = CurrentSaveVersion,
+                playerName = _gameStatus.PlayerName,
+                coins = _gameStatus.Coins,
+                bestScore = _gameStatus.BestScore,
+                unlockedAchivements = _gameStatus.unlockedAchivements
+            };
+        }
+
+        private SaveData NormalizeSaveData(SaveData data)
+        {
+            if (data == null)
+            {
+                return null;
+            }
+
+            if (data.saveVersion <= 0)
+            {
+                data.saveVersion = 1;
+            }
+
+            data.playerName ??= DefaultPlayerName;
+            data.unlockedAchivements ??= new List<string>();
+
+            if (data.saveVersion < CurrentSaveVersion)
+            {
+                Debug.Log($"Migrating save data from version {data.saveVersion} to version {CurrentSaveVersion}.");
+                data.saveVersion = CurrentSaveVersion;
+            }
+
+            return data;
+        }
+
+        private async Task RefreshEconomyCoinsAsync()
+        {
+            if (UnityServices.State != ServicesInitializationState.Initialized ||
+                !AuthenticationService.Instance.IsSignedIn)
+            {
+                return;
+            }
+
+            int? economyCoins = await _cloudDataManager.GetPlayerCoinsFromEconomy();
+            if (!economyCoins.HasValue)
+            {
+                Debug.Log($"Using cached local coin balance: {_gameStatus.Coins}.");
+                return;
+            }
+
+            _gameStatus.Coins = economyCoins.Value;
+            _dataManager.Save(BuildSaveData());
+            Debug.Log($"Economy coin balance loaded: {_gameStatus.Coins}.");
         }
 
         public async Task SavePlayerName(string newName)
@@ -278,6 +347,24 @@ namespace TestBotRoom
             await HandleAuthenticationResult(authResult);
         }
 
+        public void CompleteStartupGate()
+        {
+            if (_hasCompletedStartupGate)
+            {
+                return;
+            }
+
+            _hasCompletedStartupGate = true;
+            Debug.Log("Initial start gate completed. Continuing with the resolved menu flow.");
+        }
+
+        public void PrepareReturnToLobby()
+        {
+            TransitionToAppFlow(AppFlowState.Lobby);
+            _currentGameState = GameState.Lobby;
+            Debug.Log("Gameplay requested a return to the menu lobby. Restoring lobby app flow context before scene change.");
+        }
+
         public void ChangeScene(string sceneName)
         {
             SceneManager.LoadScene(sceneName);
@@ -294,10 +381,12 @@ namespace TestBotRoom
 
             if (HasCompletedPlayerProfile())
             {
+                Debug.Log($"Player already has an account/profile. PlayerName: '{_gameStatus.PlayerName}'. Going to lobby.");
                 EnterLobby();
                 return;
             }
 
+            Debug.Log($"Authenticated player does not have a completed profile yet. PlayerName: '{_gameStatus.PlayerName ?? "<null>"}'. Going to profile setup.");
             EnterProfileSetup();
         }
 
@@ -319,6 +408,7 @@ namespace TestBotRoom
         {
             TransitionToAppFlow(AppFlowState.NeedsLoginChoice);
             _currentGameState = GameState.StartMenu;
+            Debug.Log("App flow state changed to NeedsLoginChoice.");
             EventManager.Instance.Invoke(EventNameSaver.ShowSignInOptions);
         }
 
@@ -326,13 +416,16 @@ namespace TestBotRoom
         {
             TransitionToAppFlow(AppFlowState.NeedsProfileSetup);
             _currentGameState = GameState.StartMenu;
+            Debug.Log("App flow state changed to NeedsProfileSetup.");
             EventManager.Instance.Invoke(EventNameSaver.HideSignInOptions);
+            EventManager.Instance.Invoke(EventNameSaver.ShowProfileSetup);
         }
 
         private void EnterLobby()
         {
             TransitionToAppFlow(AppFlowState.Lobby);
             _currentGameState = GameState.Lobby;
+            Debug.Log("App flow state changed to Lobby.");
             EventManager.Instance.Invoke(EventNameSaver.HideSignInOptions);
             EventManager.Instance.Invoke(EventNameSaver.ShowLobby);
         }
@@ -366,6 +459,7 @@ namespace TestBotRoom
     public class GameStatus
     {
         public string PlayerName { get; set; }
+        public int Coins { get; set; }
         public int BestScore { get; set; }
         public List<string> unlockedAchivements;
     }

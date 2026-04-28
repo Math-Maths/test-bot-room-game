@@ -237,6 +237,11 @@ public class LoginManager : MonoBehaviour
 
     public async Task<AuthResult> StartAnonymousSignIn()
     {
+        if (AuthenticationService.Instance.IsSignedIn)
+        {
+            return AuthResult.Succeeded(METHOD_ANONYMOUS);
+        }
+
         return await SignUpAnonymouslyAsync();
     }
 
