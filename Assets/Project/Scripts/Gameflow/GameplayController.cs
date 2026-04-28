@@ -25,6 +25,7 @@ namespace TestBotRoom
         private GameStatus _gameplayStatus;
 
         private bool _firstContinue;
+        private bool _isEndFlowTransitionInProgress;
 
         private void OnEnable()
         {
@@ -82,7 +83,7 @@ namespace TestBotRoom
         private void PrepareGameplay()
         {
             //TODO: implement new data format
-            //_scoreSystem.PrepareScore(_gameplayStatus.BestScore);
+            _scoreSystem.PrepareScore(_gameplayStatus.BestScore);
             _playerInstance.transform.position = Vector3.zero;
             _followPlayerCamera.LookAt = _playerInstance.transform;
         }
@@ -94,6 +95,7 @@ namespace TestBotRoom
             GameManager.Instance.StartGamePlay();
             _laserSpawner.StartLasers();
             _firstContinue = true;
+            _isEndFlowTransitionInProgress = false;
         }
 
         private void ResetGamePlay()
@@ -103,11 +105,22 @@ namespace TestBotRoom
 
         private async Task ResetGamePlayAsync()
         {
+            if (!TryBeginEndGameAction())
+            {
+                return;
+            }
+
+            _loadingScreen.ShowLoadScreen();
+
             await EndRunAndReport();
+
+            //TODO: Show double coin 
 
             _playerInstance.ResetPosition();
             _followPlayerCamera.LookAt = _playerInstance.transform;
             _scoreSystem.ResetScore();
+
+            _loadingScreen.HideLoadingScreen();
 
             await _gameplayUIControl.ShowCountdown(gameDelayStart);
 
@@ -116,7 +129,8 @@ namespace TestBotRoom
             _laserSpawner.StartLasers();
             _coinSpawner.CreateACoin();
             _firstContinue = true;
-            _gameplayUIControl.ResetContinueButton();
+            _gameplayUIControl.ResetEndScreenState();
+            _isEndFlowTransitionInProgress = false;
         }
 
         private void ContinueGameplay()
@@ -126,10 +140,9 @@ namespace TestBotRoom
 
         private async Task ContinueGameplayAsync()
         {
-            if(!_firstContinue)
+            if(!_firstContinue || !TryBeginEndGameAction())
                 return;
 
-            
             //TODO: await play AD
             _playerInstance.ResetPosition();
             _followPlayerCamera.LookAt = _playerInstance.transform;
@@ -140,6 +153,8 @@ namespace TestBotRoom
             _laserSpawner.StartLasers(true);
             _coinSpawner.CreateACoin();
             _firstContinue = false;
+            _gameplayUIControl.ResetEndScreenState();
+            _isEndFlowTransitionInProgress = false;
         }
 
         private void OnGameplayEnd()
@@ -154,10 +169,16 @@ namespace TestBotRoom
 
         private async Task GoToMainMenuAsync()
         {
-            _gameplayUIControl.ResetContinueButton();
+            if (!TryBeginEndGameAction())
+            {
+                return;
+            }
+
             _loadingScreen.ShowLoadScreen();
             await EndRunAndReport();
 
+            _gameplayUIControl.ResetEndScreenState();
+            GameManager.Instance.PrepareReturnToLobby();
             GameManager.Instance.ChangeScene("Menu_Scene");
         }
 
@@ -171,6 +192,18 @@ namespace TestBotRoom
         private void GetStatus()
         {
             _gameplayStatus = GameManager.Instance.GetPlayerData();
+        }
+
+        private bool TryBeginEndGameAction()
+        {
+            if (_isEndFlowTransitionInProgress)
+            {
+                return false;
+            }
+
+            _isEndFlowTransitionInProgress = true;
+            _gameplayUIControl.BeginEndScreenActionTransition();
+            return true;
         }
 
         //Provisional Method

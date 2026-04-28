@@ -20,6 +20,8 @@ namespace TestBotRoom.UI
         [SerializeField] private float endScreenDelay = 3f;
         [SerializeField] private Image continueButton;
         [SerializeField] private TMP_Text continueText;
+        [SerializeField] private Button menuButton;
+        [SerializeField] private Button resetButton;
         [SerializeField] private Button buttonToContinue;
 
         [Space(10)]
@@ -35,6 +37,7 @@ namespace TestBotRoom.UI
         private Action _resetGameAction;
         private Action _goToMenuAction;
         private Action _continueGameplayAction;
+        private Coroutine _showEndScreenCoroutine;
 
         public void ConfigureActions(Action resetGameAction, Action goToMenuAction, Action continueGameplayAction)
         {
@@ -51,7 +54,7 @@ namespace TestBotRoom.UI
 
             _continueButtonOriginalColor = continueButton.color;
             _continueTextOriginalColor = continueText.color;
-            buttonToContinue.enabled = true;
+            SetEndScreenButtonsInteractable(true, true);
         }
 
         private void OnDisable()
@@ -108,7 +111,12 @@ namespace TestBotRoom.UI
 
         public void ShowEndScreen(int finalScore, bool canContinue = true)
         {
-            StartCoroutine(showEndScreenAfterDelay(finalScore, canContinue));
+            if (_showEndScreenCoroutine != null)
+            {
+                StopCoroutine(_showEndScreenCoroutine);
+            }
+
+            _showEndScreenCoroutine = StartCoroutine(showEndScreenAfterDelay(finalScore, canContinue));
         }
 
         public void DisableControls()
@@ -120,7 +128,25 @@ namespace TestBotRoom.UI
         {
             continueButton.color = _continueButtonOriginalColor;
             continueText.color = _continueTextOriginalColor;
-            buttonToContinue.enabled = true;
+            buttonToContinue.interactable = true;
+        }
+
+        public void BeginEndScreenActionTransition()
+        {
+            if (_showEndScreenCoroutine != null)
+            {
+                StopCoroutine(_showEndScreenCoroutine);
+                _showEndScreenCoroutine = null;
+            }
+
+            SetEndScreenButtonsInteractable(false, false);
+            endScreenPanel.Hide();
+        }
+
+        public void ResetEndScreenState()
+        {
+            ResetContinueButton();
+            SetEndScreenButtonsInteractable(true, true);
         }
 
         IEnumerator showEndScreenAfterDelay(int finalScore, bool canContinue)
@@ -130,18 +156,38 @@ namespace TestBotRoom.UI
             {
                 continueButton.color = Color.gray5;
                 continueText.color = Color.gray7;
-                buttonToContinue.enabled = false;
+                buttonToContinue.interactable = false;
             }
             else
             {
                 continueButton.color = _continueButtonOriginalColor;
                 continueText.color = _continueTextOriginalColor;
-                buttonToContinue.enabled = true;
+                buttonToContinue.interactable = true;
             }
 
+            SetEndScreenButtonsInteractable(true, canContinue);
             currentScoreText.SetScore(finalScore);
             endScreenPanel.gameObject.SetActive(true);
             endScreenPanel.PlayGameOverAnimation();
+            _showEndScreenCoroutine = null;
+        }
+
+        private void SetEndScreenButtonsInteractable(bool primaryButtonsInteractable, bool continueButtonInteractable)
+        {
+            if (menuButton != null)
+            {
+                menuButton.interactable = primaryButtonsInteractable;
+            }
+
+            if (resetButton != null)
+            {
+                resetButton.interactable = primaryButtonsInteractable;
+            }
+
+            if (buttonToContinue != null)
+            {
+                buttonToContinue.interactable = continueButtonInteractable;
+            }
         }
     }
 }

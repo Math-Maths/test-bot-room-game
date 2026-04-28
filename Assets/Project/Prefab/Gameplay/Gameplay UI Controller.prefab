@@ -405,18 +405,6 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1527494017455913712}
-        m_TargetAssemblyTypeName: TestBotRoom.UI.GameOverPanelTweenControl, Assembly-CSharp
-        m_MethodName: Hide
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
       - m_Target: {fileID: 4546714630955246881}
         m_TargetAssemblyTypeName: TestBotRoom.UI.GameplayUIControl, Assembly-CSharp
         m_MethodName: OnResetButtonClicked
@@ -772,6 +760,8 @@ MonoBehaviour:
   endScreenDelay: 2
   continueButton: {fileID: 679876014204869427}
   continueText: {fileID: 1581847842223268031}
+  menuButton: {fileID: 2283432543997699569}
+  resetButton: {fileID: 193504810858966825}
   buttonToContinue: {fileID: 6908064995107854363}
   controlsPanel: {fileID: 4817999108450378605}
   startDelayText: {fileID: 7114336814089449855}
@@ -2476,18 +2466,6 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1527494017455913712}
-        m_TargetAssemblyTypeName: TestBotRoom.UI.GameOverPanelTweenControl, Assembly-CSharp
-        m_MethodName: Hide
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
       - m_Target: {fileID: 4546714630955246881}
         m_TargetAssemblyTypeName: TestBotRoom.UI.GameplayUIControl, Assembly-CSharp
         m_MethodName: OnContinueGameplayButtonClicked
