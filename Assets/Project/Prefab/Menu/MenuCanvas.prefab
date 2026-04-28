@@ -229,7 +229,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &4445205227886162344
 RectTransform:
   m_ObjectHideFlags: 0
@@ -246,8 +246,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: -3.2797}
+  m_SizeDelta: {x: 0, y: -6.5594}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &6102629100018026980
 CanvasRenderer:
@@ -277,7 +277,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Downloaing information. It won't take much time!
+  m_text: a
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 79028333ede810645b6435944c1321e8, type: 2}
   m_sharedMaterial: {fileID: -6417989161261182809, guid: 79028333ede810645b6435944c1321e8, type: 2}
@@ -304,12 +304,12 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 35.35
+  m_fontSize: 42
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
   m_fontSizeMin: 18
-  m_fontSizeMax: 194.35
+  m_fontSizeMax: 42
   m_fontStyle: 0
   m_HorizontalAlignment: 2
   m_VerticalAlignment: 512
@@ -1965,6 +1965,70 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!1 &1460045470852081973
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6433431622297173023}
+  - component: {fileID: 2366764404491494621}
+  m_Layer: 5
+  m_Name: Login Option Container
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!224 &6433431622297173023
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1460045470852081973}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 648114706711516220}
+  - {fileID: 5373487276323831654}
+  m_Father: {fileID: 1813944305474430348}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 348.14, y: -118.99275}
+  m_SizeDelta: {x: 696.28, y: 237.99}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &2366764404491494621
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1460045470852081973}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 30649d3a9faa99c48a7b1166b86bf2a0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.HorizontalLayoutGroup
+  m_Padding:
+    m_Left: 0
+    m_Right: 0
+    m_Top: 0
+    m_Bottom: 0
+  m_ChildAlignment: 4
+  m_Spacing: 0
+  m_ChildForceExpandWidth: 1
+  m_ChildForceExpandHeight: 1
+  m_ChildControlWidth: 0
+  m_ChildControlHeight: 0
+  m_ChildScaleWidth: 0
+  m_ChildScaleHeight: 0
+  m_ReverseArrangement: 0
 --- !u!1 &1502250024725391995
 GameObject:
   m_ObjectHideFlags: 0
@@ -2408,8 +2472,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 348.13986, y: -519.3136}
-  m_SizeDelta: {x: 836.28, y: 261.88}
+  m_AnchoredPosition: {x: 348.13986, y: -550.9761}
+  m_SizeDelta: {x: 772.8505, y: 261.88}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &8368928371813405806
 MonoBehaviour:
@@ -2699,11 +2763,11 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 6336108295241306583}
-  m_Father: {fileID: 1813944305474430348}
+  m_Father: {fileID: 6433431622297173023}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 533.1475, y: -118.995}
   m_SizeDelta: {x: 137.5, y: 137.5}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &8527911064296045772
@@ -2792,30 +2856,6 @@ MonoBehaviour:
         m_TargetAssemblyTypeName: TestBotRoom.UI.MenuCanvasControl, Assembly-CSharp
         m_MethodName: OnAnonymousSignInButtonClicked
         m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 2012652792193998419}
-        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
-        m_MethodName: SetActive
-        m_Mode: 6
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 1
-        m_CallState: 2
-      - m_Target: {fileID: 5090570749419087607}
-        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
-        m_MethodName: SetActive
-        m_Mode: 6
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -2931,7 +2971,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 46.55
+  m_fontSize: 44.3
   m_fontSizeBase: 14
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -3164,13 +3204,12 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 3434404408377915028}
-  - {fileID: 648114706711516220}
-  - {fileID: 5373487276323831654}
+  - {fileID: 6433431622297173023}
   m_Father: {fileID: 4582610235636831661}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 348.14, y: -276.88776}
   m_SizeDelta: {x: 696.28, y: 237.9855}
   m_Pivot: {x: 0.5, y: 0}
 --- !u!114 &3381521115559022408
@@ -3288,7 +3327,6 @@ GameObject:
   - component: {fileID: 5444450934319507210}
   - component: {fileID: 378850096355096077}
   - component: {fileID: 8643974395943434537}
-  - component: {fileID: 6553431386854122914}
   - component: {fileID: 4576714130122994976}
   m_Layer: 5
   m_Name: Start Button
@@ -3314,7 +3352,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 348.14, y: -118.99275}
+  m_AnchoredPosition: {x: 264.695, y: -118.99275}
   m_SizeDelta: {x: 362.5, y: 150}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &5444450934319507210
@@ -3399,22 +3437,10 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 42425514347611195}
-        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
-        m_MethodName: SetActive
-        m_Mode: 6
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 1
-        m_CallState: 2
-      - m_Target: {fileID: 2545115700528286173}
-        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
-        m_MethodName: SetActive
-        m_Mode: 6
+      - m_Target: {fileID: 851025692714543655}
+        m_TargetAssemblyTypeName: TestBotRoom.UI.MenuCanvasControl, Assembly-CSharp
+        m_MethodName: OnStartButtonClicked
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -3423,20 +3449,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
---- !u!114 &6553431386854122914
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2545115700528286173}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c51f2520d92623340b9cbe89262550b9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::TestBotRoom.Utils.OnEventReaction
-  eventName: 0
-  reactionType: 0
 --- !u!114 &4576714130122994976
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4251,12 +4263,12 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 4445205227886162344}
-  m_Father: {fileID: 4582610235636831661}
+  m_Father: {fileID: 8893056140704632857}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 554.9742, y: 79.6346}
+  m_SizeDelta: {x: 637.9003, y: 55.0372}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &3117190867184068780
 GameObject:
@@ -4578,7 +4590,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 376.19873, y: -0.47366714}
+  m_AnchoredPosition: {x: 321, y: -0.49999}
   m_SizeDelta: {x: 98.041504, y: 102.3042}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &2594969482666735709
@@ -4938,6 +4950,7 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 171054329357280734}
+  - {fileID: 4114772394908702105}
   - {fileID: 4582610235636831661}
   - {fileID: 6136936113711720500}
   m_Father: {fileID: 1126679321667227691}
@@ -5565,8 +5578,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 418.14, y: -97.80023}
-  m_SizeDelta: {x: 596.2913, y: 104.9473}
+  m_AnchoredPosition: {x: 386.42526, y: -99.00641}
+  m_SizeDelta: {x: 445.848, y: 78.4692}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &7686829310165196646
 CanvasRenderer:
@@ -7215,12 +7228,12 @@ GameObject:
   - component: {fileID: 4582610235636831661}
   - component: {fileID: 7424431578568657000}
   m_Layer: 5
-  m_Name: Start - Login Container
+  m_Name: Start Container
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &4582610235636831661
 RectTransform:
   m_ObjectHideFlags: 0
@@ -7233,14 +7246,13 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 4114772394908702105}
   - {fileID: 1813944305474430348}
   m_Father: {fileID: 8893056140704632857}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 696.28, y: 377.26947}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 348.13986, y: -562.10895}
+  m_SizeDelta: {x: 696.28, y: 315.79}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &7424431578568657000
 MonoBehaviour:
@@ -7592,8 +7604,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: -177.8234, y: 64.42485}
-  m_SizeDelta: {x: 240.35321, y: 43.0484}
+  m_AnchoredPosition: {x: -126.35, y: 52.4}
+  m_SizeDelta: {x: 193.1459, y: 34.5933}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!222 &3475290836040824592
 CanvasRenderer:
@@ -7800,7 +7812,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 72
+  m_fontSize: 63.25
   m_fontSizeBase: 24
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -9819,10 +9831,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerInputField: {fileID: 4394355087194735741}
   startScreen: {fileID: 8940358058587546625}
+  startContainer: {fileID: 5090570749419087607}
+  loginOptionsContainer: {fileID: 1460045470852081973}
+  profileSetupContainer: {fileID: 2012652792193998419}
+  messageText: {fileID: 8022316068847276486}
+  startButton: {fileID: 2545115700528286173}
   lobbyScreen: {fileID: 6971710497600317784}
   coinCountText: {fileID: 2771368838141039533}
   bestScoreText: {fileID: 2101128447730250071}
   playerNameText: {fileID: 4447678945574982747}
+  errorMessageColor: {r: 1, g: 0, b: 0.3726473, a: 1}
 --- !u!1 &7343351828438655983
 GameObject:
   m_ObjectHideFlags: 0
@@ -9856,11 +9874,11 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 8978977374780819944}
-  m_Father: {fileID: 1813944305474430348}
+  m_Father: {fileID: 6433431622297173023}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 185.0075, y: -118.995}
   m_SizeDelta: {x: 181.25, y: 175}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &8099752228612054533
@@ -10876,7 +10894,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 67.85
+  m_fontSize: 44.3
   m_fontSizeBase: 14
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -11032,8 +11050,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 418.14, y: -206.07695}
-  m_SizeDelta: {x: 393.7751, y: 94.2518}
+  m_AnchoredPosition: {x: 386.42526, y: -200.0605}
+  m_SizeDelta: {x: 323.3455, y: 77.3942}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &6857661123528120724
 CanvasRenderer:
@@ -11478,7 +11496,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 418.14, y: -18.324707}
+  m_AnchoredPosition: {x: 386.42526, y: -18.324707}
   m_SizeDelta: {x: 533.5916, y: 36.649414}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &8940358058587546625

@@ -43,7 +43,9 @@ namespace TestBotRoom
     [System.Serializable]
     public class SaveData
     {
+        public int saveVersion;
         public string playerName;
+        public int coins;
         public int bestScore;
         public List<string> unlockedAchivements;
     }

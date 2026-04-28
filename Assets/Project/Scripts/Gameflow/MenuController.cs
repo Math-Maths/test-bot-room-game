@@ -31,19 +31,12 @@ namespace TestBotRoom
             _menuCanvas.ConfigureActions(LoadGamePlay);
         }
 
-        private async Task InitializeObjects()
+        private Task InitializeObjects()
         {
-            if(GameManager.Instance.CurrentGameState == GameState.Lobby)
-            {
-                _menuCanvas.GotoLobby(GetData());
-                _mainCamera.transform.position = new Vector3(0, 2.45f, -10);
-                _mainCamera.transform.rotation = Quaternion.Euler(Vector3.right * 9);
-                return;
-            }
-            
             _menuCanvas.Initialize();
             _mainCamera.transform.position = new Vector3(0, 2.45f, -10);
             _mainCamera.transform.rotation = Quaternion.Euler(Vector3.right * 9);
+            return Task.CompletedTask;
         }
 
         private void LoadGamePlay()
@@ -52,9 +45,5 @@ namespace TestBotRoom
             GameManager.Instance.ChangeScene("Gameplay_Scene");
         }
 
-        private GameStatus GetData()
-        {
-            return GameManager.Instance.GetPlayerData();
-        }
     }
 }

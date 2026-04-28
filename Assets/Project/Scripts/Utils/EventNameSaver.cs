@@ -24,6 +24,7 @@ static public class EventNameSaver
         HideSignInOptions,
         ShowLobby,
         OnPlayerNameChanged,
+        ShowProfileSetup,
     }
 
     #region Gameplay Events
@@ -46,6 +47,7 @@ static public class EventNameSaver
     public static string OnLoginCheckedEnd = "OnLoginCheckedEnd";
     public static string ShowSignInOptions = "ShowSignInOptions";
     public static string HideSignInOptions = "HideSignInOptions";
+    public static string ShowProfileSetup = "ShowProfileSetup";
     public static string ShowLobby = "ShowLobby";
     public static string OnPlayerNameChanged = "OnPlayerNameChanged";
     #endregion
@@ -90,6 +92,8 @@ static public class EventNameSaver
                 return ShowLobby;
             case EventNameRef.OnPlayerNameChanged:
                 return OnPlayerNameChanged;
+            case EventNameRef.ShowProfileSetup:
+                return ShowProfileSetup;
             default:
                 Debug.LogError($"EventNameRef '{_ref}' não mapeado para um nome de evento.");
                 return null;
