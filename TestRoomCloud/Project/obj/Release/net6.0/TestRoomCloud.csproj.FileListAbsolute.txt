@@ -1,0 +1,13 @@
+E:\Documents-External\Github\Lunch_Break_Digital\Test Bot Room\test-bot-room-game\TestRoomCloud\Project\obj\Release\net6.0\TestRoomCloud.csproj.AssemblyReference.cache
+E:\Documents-External\Github\Lunch_Break_Digital\Test Bot Room\test-bot-room-game\TestRoomCloud\Project\obj\Release\net6.0\TestRoomCloud.GeneratedMSBuildEditorConfig.editorconfig
+E:\Documents-External\Github\Lunch_Break_Digital\Test Bot Room\test-bot-room-game\TestRoomCloud\Project\obj\Release\net6.0\TestRoomCloud.AssemblyInfoInputs.cache
+E:\Documents-External\Github\Lunch_Break_Digital\Test Bot Room\test-bot-room-game\TestRoomCloud\Project\obj\Release\net6.0\TestRoomCloud.AssemblyInfo.cs
+E:\Documents-External\Github\Lunch_Break_Digital\Test Bot Room\test-bot-room-game\TestRoomCloud\Project\obj\Release\net6.0\TestRoomCloud.csproj.CoreCompileInputs.cache
+E:\Documents-External\Github\Lunch_Break_Digital\Test Bot Room\test-bot-room-game\TestRoomCloud\Project\obj\Release\net6.0\TestRoomCloud.sourcelink.json
+E:\Documents-External\Github\Lunch_Break_Digital\Test Bot Room\test-bot-room-game\TestRoomCloud\Project\bin\Release\net6.0\TestRoomCloud.deps.json
+E:\Documents-External\Github\Lunch_Break_Digital\Test Bot Room\test-bot-room-game\TestRoomCloud\Project\bin\Release\net6.0\TestRoomCloud.dll
+E:\Documents-External\Github\Lunch_Break_Digital\Test Bot Room\test-bot-room-game\TestRoomCloud\Project\bin\Release\net6.0\TestRoomCloud.pdb
+E:\Documents-External\Github\Lunch_Break_Digital\Test Bot Room\test-bot-room-game\TestRoomCloud\Project\obj\Release\net6.0\TestRoomCloud.dll
+E:\Documents-External\Github\Lunch_Break_Digital\Test Bot Room\test-bot-room-game\TestRoomCloud\Project\obj\Release\net6.0\refint\TestRoomCloud.dll
+E:\Documents-External\Github\Lunch_Break_Digital\Test Bot Room\test-bot-room-game\TestRoomCloud\Project\obj\Release\net6.0\TestRoomCloud.pdb
+E:\Documents-External\Github\Lunch_Break_Digital\Test Bot Room\test-bot-room-game\TestRoomCloud\Project\obj\Release\net6.0\ref\TestRoomCloud.dll

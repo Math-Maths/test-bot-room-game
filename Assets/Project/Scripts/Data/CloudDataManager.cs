@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 using Unity.Services.CloudCode;
 using Unity.Services.CloudCode.GeneratedBindings;
@@ -68,6 +69,43 @@ namespace TestBotRoom
             {
                 Debug.LogWarning($"Economy coin load failed: {ex.Message}");
                 return null;
+            }
+        }
+
+        public async Task<RewardRunResult> RewardRun(RewardRunRequest request)
+        {
+            try
+            {
+                EnsureBindings();
+                return await CloudCodeService.Instance.CallModuleEndpointAsync<RewardRunResult>(
+                    "TestRoomCloud",
+                    "RewardRun",
+                    new Dictionary<string, object>
+                    {
+                        { "runScore", request.runScore },
+                        { "usedContinue", request.usedContinue },
+                        { "runId", request.runId },
+                        { "clientSaveVersion", request.clientSaveVersion }
+                    });
+            }
+            catch (Exception ex)
+            {
+                Debug.LogError($"RewardRun failed: {ex.Message}");
+                throw;
+            }
+        }
+
+        public async Task<string> HandleNewPlayerNameEntry(string newName)
+        {
+            try
+            {
+                EnsureBindings();
+                return await m_Bindings.HandleNewPlayerNameEntry(newName);
+            }
+            catch (Exception ex)
+            {
+                Debug.LogError($"Player name update failed: {ex.Message}");
+                throw;
             }
         }
     }

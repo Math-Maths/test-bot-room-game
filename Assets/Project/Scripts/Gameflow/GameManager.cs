@@ -258,6 +258,12 @@ namespace TestBotRoom
             }
         }
 
+        private void ApplyOfflineRunRewards(int runScore)
+        {
+            _gameStatus.Coins += runScore;
+            RegisterScore(runScore);
+        }
+
         private SaveData BuildSaveData()
         {
             return new SaveData
@@ -314,6 +320,11 @@ namespace TestBotRoom
             Debug.Log($"Economy coin balance loaded: {_gameStatus.Coins}.");
         }
 
+        private void SaveLocalCache()
+        {
+            _dataManager.Save(BuildSaveData());
+        }
+
         public async Task SavePlayerName(string newName)
         {
             if (_gameStatus == null)
@@ -322,17 +333,59 @@ namespace TestBotRoom
                 _gameStatus = new GameStatus();
             }
 
-            _gameStatus.PlayerName = newName.Trim();
-            await SaveData();
+            string trimmedName = newName.Trim();
+
+            if (UnityServices.State == ServicesInitializationState.Initialized &&
+                AuthenticationService.Instance.IsSignedIn)
+            {
+                string savedName = await _cloudDataManager.HandleNewPlayerNameEntry(trimmedName);
+                _gameStatus.PlayerName = savedName;
+                SaveLocalCache();
+            }
+            else
+            {
+                _gameStatus.PlayerName = trimmedName;
+                await SaveData();
+            }
+
             EnterLobby();
 
             Debug.Log($"Player name updated to: {_gameStatus.PlayerName}");
         }
 
-        public async Task FinishRun(int coinsInThisRun)
+        public async Task FinishRun(int runScore, bool usedContinue, string runId)
         {
-            RegisterScore(coinsInThisRun);
-            await SaveData();
+            if (UnityServices.State == ServicesInitializationState.Initialized &&
+                AuthenticationService.Instance.IsSignedIn)
+            {
+                try
+                {
+                    RewardRunResult rewardRunResult = await _cloudDataManager.RewardRun(new RewardRunRequest
+                    {
+                        runScore = runScore,
+                        usedContinue = usedContinue,
+                        runId = runId,
+                        clientSaveVersion = CurrentSaveVersion
+                    });
+
+                    _gameStatus.Coins = rewardRunResult.CurrentCoinBalance;
+                    _gameStatus.BestScore = rewardRunResult.BestScore;
+                    SaveLocalCache();
+
+                    Debug.Log(
+                        $"RewardRun completed. RunId: {runId}, CoinsGranted: {rewardRunResult.CoinsGranted}, " +
+                        $"CurrentCoinBalance: {rewardRunResult.CurrentCoinBalance}, BestScore: {rewardRunResult.BestScore}, " +
+                        $"IsNewBestScore: {rewardRunResult.IsNewBestScore}, RunAlreadyProcessed: {rewardRunResult.RunAlreadyProcessed}.");
+                    return;
+                }
+                catch (Exception ex)
+                {
+                    Debug.LogWarning($"RewardRun backend failed. Falling back to local cache only. Error: {ex.Message}");
+                }
+            }
+
+            ApplyOfflineRunRewards(runScore);
+            SaveLocalCache();
         }
 
         public async Task StartAnonymousSignInAsync()

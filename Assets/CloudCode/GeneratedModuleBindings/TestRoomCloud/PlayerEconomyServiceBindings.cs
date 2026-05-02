@@ -22,5 +22,19 @@ namespace Unity.Services.CloudCode.GeneratedBindings
                 {
                 });
         }
+
+        public async Task<TestRoomCloud.RewardRunResult> RewardRun(int runScore, bool usedContinue, string runId, int clientSaveVersion)
+        {
+            return await k_Service.CallModuleEndpointAsync<TestRoomCloud.RewardRunResult>(
+                "TestRoomCloud",
+                "RewardRun",
+                new Dictionary<string, object>()
+                {
+                    {"runScore", runScore},
+                    {"usedContinue", usedContinue},
+                    {"runId", runId},
+                    {"clientSaveVersion", clientSaveVersion},
+                });
+        }
     }
 }

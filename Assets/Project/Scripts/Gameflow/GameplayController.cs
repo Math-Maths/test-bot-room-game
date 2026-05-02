@@ -3,6 +3,7 @@ using Unity.Cinemachine;
 using TestBotRoom.UI;
 using TestBotRoom.Gameplay;
 using System.Threading.Tasks;
+using System;
 
 namespace TestBotRoom
 {
@@ -26,6 +27,7 @@ namespace TestBotRoom
 
         private bool _firstContinue;
         private bool _isEndFlowTransitionInProgress;
+        private string _currentRunId;
 
         private void OnEnable()
         {
@@ -90,6 +92,7 @@ namespace TestBotRoom
 
         private void StartGamePlay()
         {
+            _currentRunId = Guid.NewGuid().ToString();
             _playerInstance.StartGamePlay();
             _coinSpawner.CreateACoin();
             GameManager.Instance.StartGamePlay();
@@ -124,6 +127,7 @@ namespace TestBotRoom
 
             await _gameplayUIControl.ShowCountdown(gameDelayStart);
 
+            _currentRunId = Guid.NewGuid().ToString();
             GameManager.Instance.StartGamePlay();
             _playerInstance.StartGamePlay();
             _laserSpawner.StartLasers();
@@ -185,8 +189,9 @@ namespace TestBotRoom
         private async Task EndRunAndReport()
         {
             int finalscore = _scoreSystem.CurrentScore;
+            bool usedContinue = !_firstContinue;
 
-            await GameManager.Instance.FinishRun(finalscore);
+            await GameManager.Instance.FinishRun(finalscore, usedContinue, _currentRunId);
         }
 
         private void GetStatus()
