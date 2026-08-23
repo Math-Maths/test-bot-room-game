@@ -5,8 +5,8 @@
 
 ---
 ## About
-Test Room is a fast-paced arcade game where you play as a test subject bot trying to survive increasingly intense laser patterns while maximizing your score.
-That`s a study case where I implement the best practices I would at the time.
+Test Room is a fast-paced arcade game where you play as a test subject bot trying to survive increasingly intense laser patterns while maximizing your score.\
+The project serves as a practical case study where I apply and evaluate gameplay architecture, mobile optimization, and performance techniques on real Android hardware.
 
 ---
 ## My Goals
